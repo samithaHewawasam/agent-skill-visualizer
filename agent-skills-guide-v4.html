@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agent Skills — Understanding the System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #060810;
+    --surface: #0b0e18;
+    --border:  #161b2e;
+    --dim:     #1e2438;
+    --primary: #818cf8;
+    --primary-dk: #1e1b4b;
+    --secondary: #34d399;
+    --accent:  #fb923c;
+    --text:    #cbd5e1;
+    --muted:   #334155;
+    --dim-t:   #475569;
+    --font:    'IBM Plex Mono', monospace;
+  }
+
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); overflow: hidden; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+
+  #app { display: flex; flex-direction: column; height: 100vh; }
+
+  #header {
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  #seq-bar {
+    padding: 12px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  #body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 64px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #footer {
+    padding: 20px 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  .slide {
+    max-width: 1000px;
+    width: 100%;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide-title {
+    font-size: 42px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--primary);
+  }
+
+  .slide-subtitle {
+    font-size: 16px;
+    color: var(--dim-t);
+    margin-bottom: 40px;
+    letter-spacing: 0.05em;
+  }
+
+  .content-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .content-box p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .content-box p:last-child {
+    margin-bottom: 0;
+  }
+
+  .code-block {
+    background: var(--primary-dk);
+    border: 1px solid var(--primary);
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .code-block::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--primary);
+    opacity: 0.5;
+  }
+
+  .code-block pre {
+    font-family: var(--font);
+    font-size: 13px;
+    color: #a5b4fc;
+    line-height: 1.7;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .highlight {
+    background: rgba(129,140,248,0.15);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .highlight-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  .highlight-content {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .list-item {
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .list-item::before {
+    content: '→';
+    color: var(--primary);
+    font-weight: 700;
+    margin-right: 12px;
+  }
+
+  .seq-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 11px;
+    color: var(--dim-t);
+    flex-shrink: 0;
+  }
+
+  .seq-dot:hover { border-color: var(--primary); }
+  .seq-dot.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--bg);
+    box-shadow: 0 0 16px rgba(129,140,248,0.4);
+    width: 36px;
+    height: 36px;
+  }
+  .seq-dot.done {
+    background: rgba(129,140,248,0.15);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .seq-line {
+    width: 20px;
+    height: 2px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .seq-line.done { background: var(--primary); }
+
+  .btn {
+    padding: 10px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .slide-counter {
+    font-size: 13px;
+    color: var(--dim-t);
+  }
+
+  .slide-counter .current {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .col-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .col-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .col-card-content {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  strong { color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header">
+    <div style="font-size: 10px; color: var(--dim-t); letter-spacing: 0.2em; margin-bottom: 6px;">AGENT SKILLS SYSTEM</div>
+    <div style="font-size: 24px; font-weight: 600; color: var(--text);">Understanding How Skills Work</div>
+  </div>
+
+  <div id="seq-bar"></div>
+
+  <div id="body">
+    <div class="slide" id="slide-content"></div>
+  </div>
+
+  <div id="footer">
+    <div class="slide-counter">
+      <span class="current" id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <button class="btn" id="btn-prev" onclick="navigate(-1)">← prev</button>
+      <button class="btn" id="btn-next" onclick="navigate(1)">next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SLIDES = [
+  {
+    title: 'What is the Prompt?',
+    subtitle: 'The starting point of every skill selection flow',
+    content: `
+      <div class="content-box">
+        <p>The <strong>prompt</strong> is the user's request or question sent to the agent. It's a natural language instruction that describes what the user wants to accomplish.</p>
+        <p>In our system, the prompt arrives at the backend and triggers a two-step process: first, skill selection (which skills are relevant?), then response generation (using those skills to answer).</p>
+      </div>
+
+      <div class="code-block" data-label="EXAMPLE">
+<pre>User Prompt:
+"Create a new list page with search and pagination"
+
+This prompt will be analyzed to select relevant skills
+like: design-system, list-components, search-patterns
+</pre>
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">KEY CONCEPT</div>
+        <div class="highlight-content">
+          The prompt is analyzed BEFORE any skills are loaded. The selection model reads the prompt + skill frontmatter to decide which skills to load.
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'What is the Use of Skills?',
+    subtitle: 'Why skills exist and what problem they solve',
+    content: `
+      <div class="content-box">
+        <p><strong>Skills</strong> are modular documentation packages that provide context to the LLM. Instead of loading all your documentation upfront, skills let you load only what's relevant to the current request.</p>
+        <p>Each skill contains specific knowledge about one topic: React patterns, API conventions, design system rules, testing strategies, etc.</p>
+      </div>
+
+      <div class="list-item">
+        Dynamically inject relevant context into the prompt
+      </div>
+      <div class="list-item">
+        Keep the context window focused on what matters
+      </div>
+      <div class="list-item">
+        Scale to unlimited documentation without hitting token limits
+      </div>
+      <div class="list-item">
+        Update documentation without redeploying code
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">REAL EXAMPLE</div>
+        <div class="highlight-content">
+          Without skills: LLM gives generic React advice<br>
+          With skills: LLM uses YOUR component library, YOUR patterns, YOUR API client
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'Which Problems Are We Solving?',
+    subtitle: 'The core challenges skills address',
+    content: `
+      <div class="list-item">
+        <strong>Context Window Limits:</strong> You can't fit all documentation in one prompt. Skills load only what's needed.
+      </div>
+
+      <div class="list-item">
+        <strong>Generic Responses:</strong> Without project context, LLMs give generic advice. Skills inject YOUR specific conventions.
+      </div>
+
+      <div class="list-item">
+        <strong>Knowledge Fragmentation:</strong> Documentation is scattered across wikis, READMEs, and team knowledge. Skills centralize it.
+      </div>
+
+      <div class="list-item">
+        <strong>Stale System Prompts:</strong> Hardcoded prompts become outdated. Skills are files on disk — update anytime.
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">THE CORE PROBLEM</div>
+        <div class="highlight-content">
+          You have <strong>megabytes of documentation</strong>, but only <strong>~20KB is relevant</strong> to any given request. Skills dynamically select the right 20KB.
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'Skills Are Not Limited to Code',
+    subtitle: 'What can be stored in a skill?',
+    content: `
+      <div class="content-box">
+        <p>Skills can contain ANY type of structured knowledge, not just code examples. They're documentation files that help the LLM understand your project context.</p>
+      </div>
+
+      <div class="list-item">
+        <strong>Code Patterns:</strong> Component templates, API clients, hooks, utilities
+      </div>
+      <div class="list-item">
+        <strong>Design Systems:</strong> Colors, typography, spacing rules, component library
+      </div>
+      <div class="list-item">
+        <strong>Architecture Rules:</strong> Folder structure, naming conventions, module boundaries
+      </div>
+      <div class="list-item">
+        <strong>Business Logic:</strong> Domain rules, workflow definitions, validation requirements
+      </div>
+      <div class="list-item">
+        <strong>API Documentation:</strong> Endpoint definitions, auth flows, error handling
+      </div>
+      <div class="list-item">
+        <strong>Testing Patterns:</strong> Test templates, mocking strategies, coverage rules
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">EXAMPLE</div>
+        <div class="highlight-content">
+          A "deployment" skill might contain: infrastructure setup, environment variables, rollback procedures, incident response playbooks — no code, just operational knowledge.
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'How We Configure Skills?',
+    subtitle: 'The file-based skill system',
+    content: `
+      <div class="content-box">
+        <p>Skills are configured as <strong>directories containing SKILL.md files</strong>. No database, no config files — just markdown on disk.</p>
+      </div>
+
+      <div class="code-block" data-label="DIRECTORY STRUCTURE">
+<pre>skills/
+├── react-components/
+│   └── SKILL.md
+├── api-integration/
+│   └── SKILL.md
+├── state-management/
+│   └── SKILL.md
+└── design-system/
+    └── SKILL.md
+</pre>
+      </div>
+
+      <div class="code-block" data-label="SKILL.md FORMAT">
+<pre>---
+name: "React Components"
+description: "Patterns for building React components"
+---
+
+# React Component Patterns
+
+## Functional Components
+Always use function declarations...
+
+## Props and TypeScript
+Define props interfaces...
+</pre>
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">CONFIGURATION STEPS</div>
+        <div class="highlight-content">
+          1. Create directory: <code>mkdir skills/my-skill</code><br>
+          2. Write SKILL.md with frontmatter + content<br>
+          3. Restart server (or hot-reload)<br>
+          4. Skill is now available for selection
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'Does Agent Read Full Content Before Proceed?',
+    subtitle: 'Lazy loading is the key to scalability',
+    content: `
+      <div class="content-box">
+        <p><strong>No.</strong> The agent NEVER reads full skill content before selection. It only reads the frontmatter (first ~600 bytes).</p>
+        <p>Full content is loaded <strong>lazily</strong> AFTER skills are selected. This is critical for performance and cost.</p>
+      </div>
+
+      <div class="code-block" data-label="THE PROCESS">
+<pre>1. Startup: Read ONLY frontmatter from all skills
+   (name + description, ~600 bytes each)
+
+2. User sends prompt
+
+3. Selection model receives:
+   - User prompt
+   - Frontmatter index (names + descriptions)
+
+4. Selection model picks relevant skills
+   e.g., [react-components, design-system]
+
+5. NOW load full content of selected skills only
+   (not all skills, just the 2-3 selected)
+
+6. Augment prompt with loaded content
+
+7. Send to generation model
+</pre>
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">WHY THIS MATTERS</div>
+        <div class="highlight-content">
+          <strong>Without lazy loading:</strong> Selection model receives 50MB of all skill content<br>
+          <strong>With lazy loading:</strong> Selection receives ~20KB frontmatter<br>
+          <strong>Result:</strong> 99.99% reduction in tokens during selection
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'What is Frontmatter?',
+    subtitle: 'Metadata for efficient skill indexing',
+    content: `
+      <div class="content-box">
+        <p><strong>Frontmatter</strong> is a YAML block at the top of each SKILL.md file containing metadata. It's what the selection model reads to decide relevance.</p>
+        <p>The backend reads ONLY the first 600 bytes of each skill file on startup to build an index. The full content is never loaded until a skill is selected.</p>
+      </div>
+
+      <div class="code-block" data-label="FRONTMATTER STRUCTURE">
+<pre>---
+name: "React Components"
+description: "Patterns for building React components with TypeScript"
+tags: [react, typescript, components]
+version: "2.1.0"
+---
+
+# React Component Patterns
+(... full documentation content follows ...)
+</pre>
+      </div>
+
+      <div class="list-item">
+        <strong>name:</strong> Human-readable skill identifier
+      </div>
+      <div class="list-item">
+        <strong>description:</strong> Short summary for selection matching
+      </div>
+      <div class="list-item">
+        <strong>tags:</strong> Categories for filtering (optional)
+      </div>
+      <div class="list-item">
+        <strong>version:</strong> Track updates (optional)
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">PERFORMANCE</div>
+        <div class="highlight-content">
+          By indexing only frontmatter, the system scans 100+ skills in under 100ms. This scales to massive skill libraries without degradation.
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'What is the Claude Way?',
+    subtitle: 'How Anthropic implements skills',
+    content: `
+      <div class="content-box">
+        <p>Claude's approach uses <strong>extended context windows + prompt caching</strong>. Skills are loaded into the prompt, and repeated content is cached across requests.</p>
+      </div>
+
+      <div class="code-block" data-label="CLAUDE API REQUEST">
+<pre>{
+  "model": "claude-sonnet-4.6",
+  "max_tokens": 4000,
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "[Skill: React Components]\\n...",
+          "cache_control": { "type": "ephemeral" }
+        },
+        {
+          "type": "text",
+          "text": "User Request: Create a modal"
+        }
+      ]
+    }
+  ]
+}
+</pre>
+      </div>
+
+      <div class="list-item">
+        <strong>200K token context window:</strong> Load multiple large skills simultaneously
+      </div>
+      <div class="list-item">
+        <strong>Prompt caching:</strong> Repeated skill content cached for ~5 minutes (90% cost reduction)
+      </div>
+      <div class="list-item">
+        <strong>File-based:</strong> Skills stored on YOUR server, full control
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">OUR IMPLEMENTATION</div>
+        <div class="highlight-content">
+          Our backend uses this approach: skills are markdown files, frontmatter is indexed, selected skills are injected into the prompt with cache control.
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'What is the OpenAI Way for Markdown?',
+    subtitle: 'How OpenAI implements skills',
+    content: `
+      <div class="content-box">
+        <p>OpenAI's approach uses the <strong>Assistants API + Vector Store</strong>. Skills are uploaded as files, and automatic vector search retrieves relevant ones.</p>
+      </div>
+
+      <div class="code-block" data-label="OPENAI SETUP">
+<pre>// 1. Create Vector Store
+const vectorStore = await openai.beta.vectorStores.create({
+  name: "Agent Skills Library"
+});
+
+// 2. Upload skill markdown files
+await openai.beta.vectorStores.fileBatches.uploadAndPoll(
+  vectorStore.id,
+  { files: skillMarkdownFiles }
+);
+
+// 3. Create Assistant with file_search
+const assistant = await openai.beta.assistants.create({
+  model: "gpt-4o",
+  tools: [{ type: "file_search" }],
+  tool_resources: {
+    file_search: { vector_store_ids: [vectorStore.id] }
+  }
+});
+</pre>
+      </div>
+
+      <div class="list-item">
+        <strong>Automatic search:</strong> No manual selection logic needed
+      </div>
+      <div class="list-item">
+        <strong>Cloud storage:</strong> Files uploaded to OpenAI's servers
+      </div>
+      <div class="list-item">
+        <strong>Vector-based:</strong> Semantic search finds relevant skills
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">TRADE-OFF</div>
+        <div class="highlight-content">
+          <strong>Pro:</strong> Simpler setup, managed service<br>
+          <strong>Con:</strong> Less control, files on OpenAI servers, different cost model
+        </div>
+      </div>
+    `
+  },
+
+  {
+    title: 'Do We Need Same Model for Prompt Augmentation?',
+    subtitle: 'Can we use different models for selection vs generation?',
+    content: `
+      <div class="content-box">
+        <p><strong>No, you can use different models.</strong> In fact, using a cheaper/faster model for selection and a powerful model for generation is recommended for cost efficiency.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="col-card">
+          <div class="col-card-title">Selection Model (Haiku)</div>
+          <div class="col-card-content">
+            <strong>Task:</strong> Read prompt + frontmatter, pick relevant skills<br><br>
+            <strong>Requirements:</strong> Fast, cheap, pattern matching<br><br>
+            <strong>Cost:</strong> ~$0.001 per selection<br><br>
+            <strong>Latency:</strong> Sub-second
+          </div>
+        </div>
+
+        <div class="col-card">
+          <div class="col-card-title">Generation Model (Sonnet)</div>
+          <div class="col-card-content">
+            <strong>Task:</strong> Generate response with augmented context<br><br>
+            <strong>Requirements:</strong> Deep reasoning, quality output<br><br>
+            <strong>Cost:</strong> ~$0.02 per response<br><br>
+            <strong>Latency:</strong> 2-5 seconds
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block" data-label="OUR CONFIGURATION (backend/server.js)">
+<pre>const MODELS = {
+  selection: 'us.anthropic.claude-haiku-4-5-20251001-v1:0',
+  generation: 'us.anthropic.claude-sonnet-4-6'
+};
+</pre>
+      </div>
+
+      <div class="highlight">
+        <div class="highlight-title">COST SAVINGS</div>
+        <div class="highlight-content">
+          Using Haiku for selection saves ~90% compared to using Sonnet for both. Selection only needs lightweight pattern matching, not deep reasoning.
+        </div>
+      </div>
+
+      <div class="content-box">
+        <p><strong>Alternative:</strong> You CAN use the same model (e.g., Sonnet) for both if simplicity is more important than cost. The architecture works either way — it's just a configuration change.</p>
+      </div>
+    `
+  },
+];
+
+let tick = 0;
+
+function navigate(dir) {
+  const newTick = tick + dir;
+  if (newTick >= 0 && newTick < SLIDES.length) {
+    tick = newTick;
+    render();
+  }
+}
+
+function goTo(n) {
+  if (n >= 0 && n < SLIDES.length) {
+    tick = n;
+    render();
+  }
+}
+
+function render() {
+  const s = SLIDES[tick];
+
+  document.getElementById('slide-content').innerHTML = `
+    <div class="slide-title">${s.title}</div>
+    <div class="slide-subtitle">${s.subtitle}</div>
+    ${s.content}
+  `;
+
+  let seqHTML = '';
+  SLIDES.forEach((_, i) => {
+    const isDone = i < tick;
+    const isActive = i === tick;
+    seqHTML += \`<div class="seq-dot \${isDone?'done':''} \${isActive?'active':''}" onclick="goTo(\${i})">\${isDone?'✓':i+1}</div>\`;
+    if (i < SLIDES.length - 1) {
+      seqHTML += \`<div class="seq-line \${i<tick?'done':''}"></div>\`;
+    }
+  });
+  document.getElementById('seq-bar').innerHTML = seqHTML;
+
+  document.getElementById('current-slide').textContent = tick + 1;
+  document.getElementById('total-slides').textContent = SLIDES.length;
+
+  document.getElementById('btn-prev').disabled = tick === 0;
+  document.getElementById('btn-next').disabled = tick === SLIDES.length - 1;
+
+  document.getElementById('body').scrollTop = 0;
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') navigate(-1);
+  if (e.key === 'ArrowRight') navigate(1);
+});
+
+render();
+</script>
+</body>
+</html>

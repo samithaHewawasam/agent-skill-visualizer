@@ -1,0 +1,128 @@
+[
+  {
+    "id": "component-patterns",
+    "name": "Component Patterns",
+    "description": "Reusable component patterns including panels, cards, tables, lists, and forms",
+    "keywords": ["component", "panel", "card", "table", "list", "form", "GenericPanel", "GenericCard", "GenericTableListCardView"],
+    "category": "UI Components",
+    "file": "component-patterns.md",
+    "useCases": [
+      "Creating list views with tables",
+      "Building card-based layouts",
+      "Implementing form panels",
+      "Displaying data in tables or cards"
+    ]
+  },
+  {
+    "id": "design-system",
+    "name": "Design System",
+    "description": "Design tokens, colors, spacing, typography, and elevation system for consistent UI",
+    "keywords": ["design", "token", "color", "spacing", "typography", "elevation", "shadow", "border"],
+    "category": "Design",
+    "file": "design-system.md",
+    "useCases": [
+      "Applying consistent colors and spacing",
+      "Using elevation and shadows",
+      "Typography and text styling",
+      "Border and background colors"
+    ]
+  },
+  {
+    "id": "form-patterns",
+    "name": "Form Patterns",
+    "description": "Form implementation patterns using react-hook-form with validation and best practices",
+    "keywords": ["form", "validation", "input", "react-hook-form", "field", "submit", "error"],
+    "category": "Forms",
+    "file": "form-patterns.md",
+    "useCases": [
+      "Creating forms with validation",
+      "Building multi-step wizards",
+      "Handling form submission",
+      "Dynamic form fields"
+    ]
+  },
+  {
+    "id": "layout-patterns",
+    "name": "Layout Patterns",
+    "description": "Page layouts including PageLayout, ContentLayout, and EntityHome patterns",
+    "keywords": ["layout", "page", "PageLayout", "ContentLayout", "EntityHome", "header", "navigation"],
+    "category": "Layout",
+    "file": "layout-patterns.md",
+    "useCases": [
+      "Creating list pages",
+      "Building detail pages",
+      "Implementing page headers",
+      "Adding panels to pages"
+    ]
+  },
+  {
+    "id": "api-and-types",
+    "name": "API & Types",
+    "description": "API patterns using React Query and TypeScript type definitions",
+    "keywords": ["api", "react-query", "typescript", "types", "query", "mutation", "fetch"],
+    "category": "Data Management",
+    "file": "api-and-types.md",
+    "useCases": [
+      "Fetching data with React Query",
+      "Creating mutation hooks",
+      "Defining TypeScript types",
+      "Handling API calls"
+    ]
+  },
+  {
+    "id": "state-management",
+    "name": "State Management",
+    "description": "State management patterns using Zustand for global state",
+    "keywords": ["state", "zustand", "store", "global state", "management"],
+    "category": "State",
+    "file": "state-management.md",
+    "useCases": [
+      "Creating Zustand stores",
+      "Managing global state",
+      "Sharing state between components",
+      "State persistence"
+    ]
+  },
+  {
+    "id": "navigation",
+    "name": "Navigation",
+    "description": "Navigation patterns including left menu, routing, and breadcrumbs",
+    "keywords": ["navigation", "menu", "routing", "route", "breadcrumb", "drawer"],
+    "category": "Navigation",
+    "file": "navigation.md",
+    "useCases": [
+      "Adding menu items",
+      "Creating routes",
+      "Implementing breadcrumbs",
+      "Setting up navigation"
+    ]
+  },
+  {
+    "id": "project-structure",
+    "name": "Project Structure",
+    "description": "Project file structure and organization patterns",
+    "keywords": ["structure", "folder", "organization", "architecture", "files"],
+    "category": "Architecture",
+    "file": "project-structure.md",
+    "useCases": [
+      "Organizing files and folders",
+      "Understanding project architecture",
+      "File naming conventions",
+      "Module organization"
+    ]
+  },
+  {
+    "id": "specialized-features",
+    "name": "Specialized Features",
+    "description": "Advanced features like floating chat, interactive flows, and context management",
+    "keywords": ["chat", "flow", "interactive", "floating", "context", "advanced"],
+    "category": "Advanced",
+    "file": "specialized-features.md",
+    "useCases": [
+      "Implementing floating chat",
+      "Creating interactive flows",
+      "Managing context",
+      "Building advanced features"
+    ]
+  }
+]

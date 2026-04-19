@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agent Skills — Complete Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #060810;
+    --surface: #0b0e18;
+    --border:  #161b2e;
+    --dim:     #1e2438;
+    --primary: #818cf8;
+    --primary-dk: #1e1b4b;
+    --secondary: #34d399;
+    --secondary-dk: #052e16;
+    --accent:  #fb923c;
+    --accent-dk: #1c0a00;
+    --highlight: #38bdf8;
+    --highlight-dk: #0c1a2e;
+    --ok:      #4ade80;
+    --warn:    #fbbf24;
+    --text:    #cbd5e1;
+    --muted:   #334155;
+    --dim-t:   #475569;
+    --font:    'IBM Plex Mono', monospace;
+  }
+
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); overflow: hidden; }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 3px; }
+
+  @keyframes fadeIn   { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes slideIn  { from{opacity:0;transform:translateX(-20px)} to{opacity:1;transform:translateX(0)} }
+  @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.4} }
+  @keyframes glow     { 0%,100%{box-shadow:0 0 20px rgba(129,140,248,.2)} 50%{box-shadow:0 0 30px rgba(129,140,248,.4)} }
+
+  /* Layout */
+  #app { display: flex; flex-direction: column; height: 100vh; }
+
+  #header {
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+  }
+
+  #header-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  #progress-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    max-width: 400px;
+    justify-content: flex-end;
+  }
+
+  #slide-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 64px 48px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  #footer {
+    padding: 20px 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  /* Slide */
+  .slide {
+    max-width: 1200px;
+    width: 100%;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-subtitle {
+    font-size: 18px;
+    color: var(--dim-t);
+    margin-bottom: 48px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    animation: slideIn 0.5s ease;
+  }
+
+  .card-header {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--dim-t);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .card-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .card-content {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  /* Code blocks */
+  .code-block {
+    background: var(--primary-dk);
+    border: 1px solid var(--primary);
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    position: relative;
+    overflow-x: auto;
+  }
+
+  .code-block::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--primary);
+    opacity: 0.6;
+  }
+
+  .code-block pre {
+    font-family: var(--font);
+    font-size: 13px;
+    color: #a5b4fc;
+    line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* Comparison grid */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+
+  .compare-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+  }
+
+  .compare-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .compare-card.claude::before { background: var(--primary); }
+  .compare-card.openai::before { background: var(--ok); }
+
+  .compare-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .compare-badge {
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+  }
+
+  .compare-badge.claude {
+    background: rgba(129,140,248,0.15);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+  }
+
+  .compare-badge.openai {
+    background: rgba(74,222,128,0.15);
+    color: var(--ok);
+    border: 1px solid var(--ok);
+  }
+
+  /* Flow diagram */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: slideIn 0.5s ease;
+  }
+
+  .flow-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary-dk);
+    border: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary);
+    flex-shrink: 0;
+  }
+
+  .flow-content {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+
+  .flow-label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .flow-desc {
+    font-size: 13px;
+    color: var(--dim-t);
+    line-height: 1.6;
+  }
+
+  .flow-arrow {
+    text-align: center;
+    color: var(--primary);
+    font-size: 24px;
+    margin: -8px 0;
+  }
+
+  /* Feature list */
+  .feature-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 32px 0;
+  }
+
+  .feature-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s;
+  }
+
+  .feature-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(129,140,248,0.15);
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--primary-dk);
+    border: 1px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .feature-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .feature-desc {
+    font-size: 12px;
+    color: var(--dim-t);
+    line-height: 1.6;
+  }
+
+  /* Problem cards */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 32px 0;
+  }
+
+  .problem-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .problem-card::before {
+    content: '⚠';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 120px;
+    opacity: 0.05;
+  }
+
+  .problem-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--warn);
+  }
+
+  .problem-desc {
+    font-size: 13px;
+    color: var(--dim-t);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .solution {
+    background: var(--secondary-dk);
+    border: 1px solid var(--secondary);
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 12px;
+    color: var(--secondary);
+  }
+
+  .solution::before {
+    content: '✓ Solution: ';
+    font-weight: 600;
+  }
+
+  /* Progress dots */
+  .progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0px;
+    color: transparent;
+    flex-shrink: 0;
+  }
+
+  .progress-dot:hover {
+    border-color: var(--primary);
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(129,140,248,0.3);
+  }
+
+  .progress-dot.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--bg);
+    box-shadow: 0 0 15px rgba(129,140,248,0.5);
+    width: 14px;
+    height: 14px;
+    font-size: 0px;
+  }
+
+  .progress-dot.done {
+    background: rgba(129,140,248,0.4);
+    border-color: var(--primary);
+    color: transparent;
+    font-size: 0px;
+  }
+
+  .progress-line {
+    width: 12px;
+    height: 2px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .progress-line.done {
+    background: var(--primary);
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 10px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-dk);
+    color: var(--primary);
+  }
+
+  .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .btn.primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--bg);
+  }
+
+  .btn.primary:hover:not(:disabled) {
+    background: #a5b4fc;
+    border-color: #a5b4fc;
+  }
+
+  /* Highlight boxes */
+  .highlight-box {
+    background: var(--highlight-dk);
+    border: 1px solid var(--highlight);
+    border-left: 4px solid var(--highlight);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 24px 0;
+  }
+
+  .highlight-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--highlight);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .highlight-content {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Lists */
+  .custom-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .custom-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .custom-list li:last-child {
+    border-bottom: none;
+  }
+
+  .custom-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 32px 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--dim-t);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Table */
+  .comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 32px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .comparison-table th {
+    background: var(--dim);
+    color: var(--text);
+    padding: 16px;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .comparison-table td {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--dim-t);
+    line-height: 1.6;
+  }
+
+  .comparison-table tr:hover td {
+    background: rgba(129,140,248,0.05);
+  }
+
+  /* Counter */
+  .slide-counter {
+    font-size: 13px;
+    color: var(--dim-t);
+  }
+
+  .slide-counter .current {
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    #progress-bar {
+      width: 100%;
+      max-width: 100%;
+      justify-content: flex-start;
+    }
+
+    #slide-container {
+      padding: 32px 24px;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header">
+    <div id="header-content">
+      <div style="font-size: 10px; color: var(--dim-t); letter-spacing: 0.2em; margin-bottom: 8px;">COMPREHENSIVE GUIDE</div>
+      <div style="font-size: 28px; font-weight: 700; color: var(--text);">Agent Skills System — Deep Dive</div>
+      <div style="font-size: 13px; color: var(--dim-t); margin-top: 8px;">Understanding prompt augmentation, skill selection, and intelligent context loading</div>
+    </div>
+    <div id="progress-bar"></div>
+  </div>
+
+  <div id="slide-container">
+    <div class="slide" id="slide-content"></div>
+  </div>
+
+  <div id="footer">
+    <div class="slide-counter">
+      Slide <span class="current" id="current-slide">1</span> / <span id="total-slides">18</span>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <button class="btn" id="btn-prev" onclick="navigate(-1)">← Previous</button>
+      <button class="btn primary" id="btn-next" onclick="navigate(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SLIDES = [
+  // Slide 1: What is a Prompt?
+  {
+    title: 'What is a Prompt?',
+    subtitle: 'The foundation of human-AI interaction',
+    content: `
+      <div class="card">
+        <div class="card-header">Core Concept</div>
+        <div class="card-title">Prompt = Instructions to an AI Model</div>
+        <div class="card-content">
+          A prompt is the text input you provide to a Large Language Model (LLM) to generate a response. It's the primary interface for communicating your intent, providing context, and guiding the model's output. Think of it as a question, command, or context that shapes what the AI generates.
+        </div>
+      </div>
+
+      <div class="code-block" data-label="SIMPLE PROMPT EXAMPLE">
+<pre>User Prompt: "Write a Python function to calculate factorial"
+
+LLM Response:
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial(n - 1)
+</pre>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">📝</div>
+          <div class="feature-title">Natural Language</div>
+          <div class="feature-desc">Write in plain English (or any language) — no special syntax required</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Intent-Driven</div>
+          <div class="feature-desc">The clearer your intent, the better the response quality</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🔄</div>
+          <div class="feature-title">Iterative</div>
+          <div class="feature-desc">Refine prompts based on responses to improve results</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📦</div>
+          <div class="feature-title">Context-Rich</div>
+          <div class="feature-desc">Include examples, constraints, and background information</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">💡 Why Prompts Matter</div>
+        <div class="highlight-content">
+          The quality of AI output is <strong>directly proportional</strong> to the quality of your prompt. A vague prompt yields vague results. A detailed, well-structured prompt with clear context produces precise, actionable responses.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 2: Prompt Types
+  {
+    title: 'Types of Prompts',
+    subtitle: 'Different prompts for different goals',
+    content: `
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-title">🧑‍💻 System Prompt</div>
+          <div class="problem-desc">
+            Sets the overall behavior, personality, and constraints for the AI. Defined once and applies to all interactions.
+          </div>
+          <div class="solution">Example: "You are a helpful coding assistant that follows PEP 8 guidelines"</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">👤 User Prompt</div>
+          <div class="problem-desc">
+            The actual request or question from the user. This is what you type in the chat.
+          </div>
+          <div class="solution">Example: "Create a REST API endpoint for user registration"</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">🤖 Assistant Response</div>
+          <div class="problem-desc">
+            The AI's generated output. Can include code, explanations, or follow-up questions.
+          </div>
+          <div class="solution">Example: "Here's the endpoint implementation with validation..."</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">📚 Context/Few-Shot Prompt</div>
+          <div class="problem-desc">
+            Provides examples to guide the model's output format and style.
+          </div>
+          <div class="solution">Example: "Input: 'user@email.com' → Output: 'valid' | Input: 'invalid' → Output: 'invalid'"</div>
+        </div>
+      </div>
+
+      <div class="code-block" data-label="PROMPT CONVERSATION FLOW">
+<pre>[System]: You are a TypeScript expert. Always use strict types.
+
+[User]: Create a function to validate email
+
+[Assistant]: Here's a strictly typed email validator:
+function validateEmail(email: string): boolean { ... }
+
+[User]: Add error messages
+
+[Assistant]: Updated with detailed error types:
+type ValidationResult = { valid: boolean; error?: string }
+function validateEmail(email: string): ValidationResult { ... }
+</pre>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🎯 Prompt Engineering</div>
+        <div class="highlight-content">
+          <strong>Prompt Engineering</strong> is the practice of crafting effective prompts to maximize output quality. Key techniques include:<br>
+          • Zero-shot: Direct instruction without examples<br>
+          • Few-shot: Providing 2-5 examples to establish patterns<br>
+          • Chain-of-thought: Asking the model to explain its reasoning<br>
+          • Role-playing: "Act as a senior DevOps engineer..."
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 3: Introduction to Skills
+  {
+    title: 'What Are Agent Skills?',
+    subtitle: 'The foundation of intelligent prompt augmentation',
+    content: `
+      <div class="card">
+        <div class="card-header">Core Concept</div>
+        <div class="card-title">Skills = Modular Knowledge Bundles</div>
+        <div class="card-content">
+          Agent skills are discrete, self-contained packages of documentation, patterns, and context that can be dynamically injected into an LLM's prompt. Instead of loading every piece of knowledge upfront, skills enable selective, intelligent context loading based on what the user is actually trying to do.
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Scalable Knowledge</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">⚡</div>
+          <div class="stat-label">Dynamic Loading</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">🎯</div>
+          <div class="stat-label">Context Aware</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">💡 Key Insight</div>
+        <div class="highlight-content">
+          Skills solve the fundamental limitation of LLMs: <strong>context window size</strong>. You can't load your entire codebase, all documentation, and every pattern into the prompt. Skills let you load exactly what's needed, when it's needed.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 2: The Problem
+  {
+    title: 'Problems We\'re Solving',
+    subtitle: 'Why traditional approaches fall short',
+    content: `
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-title">Context Window Limits</div>
+          <div class="problem-desc">
+            Modern LLMs have 200K+ token limits, but loading everything is wasteful and slow. Most context goes unused.
+          </div>
+          <div class="solution">Skills load only relevant documentation for the specific task</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">Knowledge Fragmentation</div>
+          <div class="problem-desc">
+            Documentation, patterns, APIs, and conventions are scattered across wikis, READMEs, and developer brains.
+          </div>
+          <div class="solution">Skills centralize knowledge in discoverable, reusable modules</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">Stale System Prompts</div>
+          <div class="problem-desc">
+            Hardcoded system prompts become outdated quickly and require redeployment to update.
+          </div>
+          <div class="solution">Skills are files on disk — update anytime, no deployment needed</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">Generic Responses</div>
+          <div class="problem-desc">
+            Without project-specific context, LLMs give generic advice that doesn't match your patterns or tools.
+          </div>
+          <div class="solution">Skills inject your exact conventions, APIs, and component library</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🎯 The Core Problem</div>
+        <div class="highlight-content">
+          You have <strong>megabytes of documentation</strong>, but only <strong>~20KB is relevant</strong> to any given user request. Skills dynamically select and inject the right 20KB every time.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 3: The Two-Step Process
+  {
+    title: 'How It Works: Two-Step Pipeline',
+    subtitle: 'Skill selection → Prompt augmentation → Response generation',
+    content: `
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">1</div>
+          <div class="flow-content">
+            <div class="flow-label">User Sends Prompt</div>
+            <div class="flow-desc">"Create a new list page with search and pagination"</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">2</div>
+          <div class="flow-content">
+            <div class="flow-label">Skill Selection (Fast Model)</div>
+            <div class="flow-desc">A lightweight model (Haiku) reads the prompt + all skill frontmatter and selects relevant skills with confidence scores</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">3</div>
+          <div class="flow-content">
+            <div class="flow-label">Lazy Content Loading</div>
+            <div class="flow-desc">ONLY the selected skills' full content is loaded from disk (not the entire skill library)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">4</div>
+          <div class="flow-content">
+            <div class="flow-label">Prompt Augmentation</div>
+            <div class="flow-desc">Original prompt + loaded skill documentation are combined into an enriched context</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">5</div>
+          <div class="flow-content">
+            <div class="flow-label">Response Generation (Quality Model)</div>
+            <div class="flow-desc">A powerful model (Sonnet) generates the final response with full project context</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block" data-label="EXAMPLE FLOW">
+<pre>Prompt: "Add dark mode toggle"
+
+Selection Model picks:
+  • design-system (0.95 confidence)
+  • state-management (0.87 confidence)
+  • theme-configuration (0.91 confidence)
+
+Augmented prompt sent to generation model:
+  [Skill: Design System]
+  Your app uses styled-components with a ThemeProvider...
+
+  [Skill: State Management]
+  Use Zustand for global state. Create a store like...
+
+  [Skill: Theme Config]
+  Themes defined in src/theme/...
+
+  User Request: "Add dark mode toggle"
+</pre>
+      </div>
+    `
+  },
+
+  // Slide 4: Why Two Models?
+  {
+    title: 'Why Use Two Different Models?',
+    subtitle: 'Cost optimization meets quality',
+    content: `
+      <div class="compare-grid">
+        <div class="compare-card claude">
+          <div class="compare-title">
+            <span class="compare-badge claude">SELECTION MODEL</span>
+            <span>Haiku 4.5</span>
+          </div>
+          <ul class="custom-list">
+            <li><strong>Fast:</strong> Sub-second latency</li>
+            <li><strong>Cheap:</strong> ~$0.001 per selection</li>
+            <li><strong>Sufficient:</strong> Only needs to read frontmatter (name + description)</li>
+            <li><strong>Task:</strong> Pattern matching — which skills relate to this prompt?</li>
+          </ul>
+        </div>
+
+        <div class="compare-card openai">
+          <div class="compare-title">
+            <span class="compare-badge openai">GENERATION MODEL</span>
+            <span>Sonnet 4.6</span>
+          </div>
+          <ul class="custom-list">
+            <li><strong>Powerful:</strong> Deep reasoning capabilities</li>
+            <li><strong>Contextual:</strong> Reads full skill documentation</li>
+            <li><strong>Quality:</strong> Produces production-ready code</li>
+            <li><strong>Task:</strong> Generate accurate response with augmented context</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">💰 Cost Efficiency</div>
+        <div class="highlight-content">
+          Using Haiku for selection saves ~90% compared to using Sonnet for both steps. Selection only needs lightweight pattern matching, not deep reasoning. This architecture processes 10,000 requests at the same cost as 1,000 requests with a single model.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Alternative: Same Model?</div>
+        <div class="card-title">You CAN use the same model for both</div>
+        <div class="card-content">
+          For simplicity or consistency, you can use one model (e.g., Sonnet) for both selection and generation. The trade-off is higher cost and slightly slower selection. The architecture remains identical — it's just a configuration change.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 5: Frontmatter
+  {
+    title: 'What is Frontmatter?',
+    subtitle: 'Metadata for efficient skill discovery',
+    content: `
+      <div class="card">
+        <div class="card-header">Definition</div>
+        <div class="card-title">Frontmatter = Skill Index</div>
+        <div class="card-content">
+          Frontmatter is a YAML block at the top of each SKILL.md file containing metadata like name, description, tags, and version. The selection model reads ONLY frontmatter (first ~600 bytes) — never the full content — to decide which skills are relevant.
+        </div>
+      </div>
+
+      <div class="code-block" data-label="SKILL.md STRUCTURE">
+<pre>---
+name: "React Components"
+description: "Patterns for building React components with TypeScript"
+tags: [react, typescript, components]
+version: "2.1.0"
+---
+
+# React Component Patterns
+
+## Functional Components
+Always use function declarations...
+
+## Props and TypeScript
+Define props interfaces...
+
+(... 5000 more lines of documentation ...)
+</pre>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">⚡ Performance Optimization</div>
+        <div class="highlight-content">
+          By indexing only frontmatter, the system can scan <strong>100+ skills</strong> in under 100ms. Full content is loaded lazily AFTER selection. This scales to massive skill libraries without performance degradation.
+        </div>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Name</div>
+          <div class="feature-desc">Human-readable skill identifier</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📝</div>
+          <div class="feature-title">Description</div>
+          <div class="feature-desc">Short summary for selection matching</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🏷️</div>
+          <div class="feature-title">Tags</div>
+          <div class="feature-desc">Categories for filtering and search</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔢</div>
+          <div class="feature-title">Version</div>
+          <div class="feature-desc">Track updates and changes</div>
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 6: Skill Configuration
+  {
+    title: 'How to Configure Skills',
+    subtitle: 'File-based architecture for easy management',
+    content: `
+      <div class="card">
+        <div class="card-header">Directory Structure</div>
+        <div class="card-title">Skills Live in a Single Folder</div>
+        <div class="card-content">
+          Each skill is a subdirectory containing a SKILL.md file. The system scans this folder on startup to build the skill index. No database, no config files — just markdown on disk.
+        </div>
+      </div>
+
+      <div class="code-block" data-label="DIRECTORY LAYOUT">
+<pre>skills/
+├── react-components/
+│   └── SKILL.md            ← Frontmatter + full docs
+├── api-integration/
+│   └── SKILL.md
+├── state-management/
+│   └── SKILL.md
+├── authentication/
+│   └── SKILL.md
+├── design-system/
+│   └── SKILL.md
+└── testing-patterns/
+    └── SKILL.md
+</pre>
+      </div>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">1</div>
+          <div class="flow-content">
+            <div class="flow-label">Create a Directory</div>
+            <div class="flow-desc">mkdir skills/my-new-skill</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">2</div>
+          <div class="flow-content">
+            <div class="flow-label">Write SKILL.md</div>
+            <div class="flow-desc">Add frontmatter (name, description) + documentation content</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">3</div>
+          <div class="flow-content">
+            <div class="flow-label">Restart Server (or hot-reload)</div>
+            <div class="flow-desc">Server scans skills/ folder and rebuilds index</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">4</div>
+          <div class="flow-content">
+            <div class="flow-label">Skill is Now Available</div>
+            <div class="flow-desc">Selection model can now choose this skill for relevant prompts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🔥 Hot Reloading</div>
+        <div class="highlight-content">
+          In development, watch the skills/ folder for changes and rebuild the index automatically. Update documentation without restarting your app.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 7: What Can Skills Contain?
+  {
+    title: 'Skills Are Not Limited to Code',
+    subtitle: 'Any structured knowledge can be a skill',
+    content: `
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">💻</div>
+          <div class="feature-title">Code Patterns</div>
+          <div class="feature-desc">Component templates, API clients, hooks, utilities</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">Design Systems</div>
+          <div class="feature-desc">Colors, typography, spacing rules, component library</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📐</div>
+          <div class="feature-title">Architecture Patterns</div>
+          <div class="feature-desc">Folder structure, naming conventions, module boundaries</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🔧</div>
+          <div class="feature-title">Tool Configurations</div>
+          <div class="feature-desc">ESLint rules, CI/CD pipelines, deployment scripts</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Data Models</div>
+          <div class="feature-desc">Database schemas, API contracts, validation rules</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🧪</div>
+          <div class="feature-title">Testing Strategies</div>
+          <div class="feature-desc">Unit test templates, E2E patterns, mocking conventions</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-title">API Documentation</div>
+          <div class="feature-desc">Endpoint definitions, auth flows, rate limits</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Business Logic</div>
+          <div class="feature-desc">Domain rules, workflow definitions, compliance requirements</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🗂️</div>
+          <div class="feature-title">Project Context</div>
+          <div class="feature-desc">Team conventions, PR templates, code review guidelines</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">💡 Real-World Example</div>
+        <div class="highlight-content">
+          A "deployment-pipeline" skill might contain: AWS configuration patterns, Docker compose templates, staging vs production environment variables, rollback procedures, and incident response playbooks. When a developer asks "How do I deploy to staging?", all this context gets injected.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 8: Content Loading Strategy
+  {
+    title: 'Does the Agent Read Everything?',
+    subtitle: 'No — lazy loading is the secret sauce',
+    content: `
+      <div class="card">
+        <div class="card-header">The Answer</div>
+        <div class="card-title">No, the Agent Never Reads Full Content Before Selection</div>
+        <div class="card-content">
+          The selection model only reads frontmatter (first ~600 bytes). Full skill content is loaded lazily AFTER selection. This is critical for scalability — you could have 1,000 skills totaling 50MB, but selection still completes in milliseconds.
+        </div>
+      </div>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">📚</div>
+          <div class="flow-content">
+            <div class="flow-label">Startup: Build Skill Index</div>
+            <div class="flow-desc">Server reads ONLY frontmatter from each SKILL.md (first 600 bytes)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">🔍</div>
+          <div class="flow-content">
+            <div class="flow-label">Selection Phase</div>
+            <div class="flow-desc">Model receives: user prompt + skill index (name + description only)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">✅</div>
+          <div class="flow-content">
+            <div class="flow-label">3 Skills Selected</div>
+            <div class="flow-desc">react-components (0.92), state-management (0.85), design-system (0.88)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">📖</div>
+          <div class="flow-content">
+            <div class="flow-label">Lazy Load ONLY Selected Skills</div>
+            <div class="flow-desc">Read full content of 3 skills from disk (~6KB total)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">🚀</div>
+          <div class="flow-content">
+            <div class="flow-label">Augmented Prompt Sent to Generation Model</div>
+            <div class="flow-desc">Original prompt + 6KB of relevant documentation</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">⚡ Performance Benefits</div>
+        <div class="highlight-content">
+          <strong>Without lazy loading:</strong> Selection model would receive 50MB of skill content (timeout, high cost)<br>
+          <strong>With lazy loading:</strong> Selection receives ~20KB frontmatter, generation receives ~6KB selected content<br>
+          <strong>Result:</strong> 99.99% reduction in tokens processed during selection
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 9: Claude Way
+  {
+    title: 'The Claude Way',
+    subtitle: 'How Anthropic implements skills with Claude',
+    content: `
+      <div class="card">
+        <div class="card-header">Anthropic's Approach</div>
+        <div class="card-title">Extended Context + Prompt Caching</div>
+        <div class="card-content">
+          Claude models have native support for large context windows (200K tokens) and prompt caching. Anthropic's architecture loads selected skills into the prompt and caches repeated context across requests.
+        </div>
+      </div>
+
+      <div class="code-block" data-label="CLAUDE API REQUEST">
+<pre>{
+  "model": "claude-sonnet-4.6",
+  "max_tokens": 4000,
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "[Skill: React Components] ...",
+          "cache_control": { "type": "ephemeral" }
+        },
+        {
+          "type": "text",
+          "text": "User Request: Create a modal dialog"
+        }
+      ]
+    }
+  ]
+}
+</pre>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">📦</div>
+          <div class="feature-title">Prompt Caching</div>
+          <div class="feature-desc">Repeated skill documentation is cached for ~5 minutes, reducing tokens by 90%</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🔄</div>
+          <div class="feature-title">Extended Context</div>
+          <div class="feature-desc">200K token window allows loading multiple large skills simultaneously</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Fast Tool Use</div>
+          <div class="feature-desc">Claude can call functions/tools to fetch additional skills mid-conversation</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🎯 Best Practice: Skill Chunks</div>
+        <div class="highlight-content">
+          Claude recommends splitting large skills into smaller chunks with clear cache boundaries. This maximizes cache hit rates and reduces costs. For example, split "API Documentation" into "API Auth", "API Endpoints", "API Error Handling" — load only what's needed.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 10: OpenAI Way
+  {
+    title: 'The OpenAI Way',
+    subtitle: 'Assistants API + File Search',
+    content: `
+      <div class="card">
+        <div class="card-header">OpenAI's Approach</div>
+        <div class="card-title">Assistants API + Vector Store</div>
+        <div class="card-content">
+          OpenAI's Assistants API allows uploading files to a Vector Store. When a user sends a message, the system automatically searches the vector store for relevant documents and injects them into the prompt. Skills become searchable documents.
+        </div>
+      </div>
+
+      <div class="code-block" data-label="OPENAI ASSISTANTS SETUP">
+<pre>// 1. Create Vector Store
+const vectorStore = await openai.beta.vectorStores.create({
+  name: "Agent Skills Library"
+});
+
+// 2. Upload skill files
+await openai.beta.vectorStores.fileBatches.uploadAndPoll(
+  vectorStore.id,
+  { files: skillFiles }
+);
+
+// 3. Create Assistant with file_search tool
+const assistant = await openai.beta.assistants.create({
+  model: "gpt-4o",
+  tools: [{ type: "file_search" }],
+  tool_resources: {
+    file_search: { vector_store_ids: [vectorStore.id] }
+  }
+});
+
+// 4. User message auto-triggers search + augmentation
+const run = await openai.beta.threads.runs.create(thread.id, {
+  assistant_id: assistant.id
+});
+</pre>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">🔍</div>
+          <div class="feature-title">Automatic Search</div>
+          <div class="feature-desc">No manual skill selection — vector search handles it</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📁</div>
+          <div class="feature-title">File Attachments</div>
+          <div class="feature-desc">Skills are literal files uploaded to OpenAI's servers</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🧵</div>
+          <div class="feature-title">Threaded Conversations</div>
+          <div class="feature-desc">Context persists across messages in a thread</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">⚠️ Trade-offs</div>
+        <div class="highlight-content">
+          <strong>Pros:</strong> No custom selection logic needed, scales automatically<br>
+          <strong>Cons:</strong> Less control over what gets injected, requires file uploads, costs tied to OpenAI's pricing model
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 11: Claude vs OpenAI Comparison
+  {
+    title: 'Claude vs OpenAI: Skill Implementation',
+    subtitle: 'Different philosophies for the same goal',
+    content: `
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Aspect</th>
+            <th>Claude (Anthropic)</th>
+            <th>OpenAI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Storage</strong></td>
+            <td>Your server / local files</td>
+            <td>OpenAI Vector Store (cloud)</td>
+          </tr>
+          <tr>
+            <td><strong>Selection</strong></td>
+            <td>Explicit (custom logic + model call)</td>
+            <td>Implicit (automatic vector search)</td>
+          </tr>
+          <tr>
+            <td><strong>Control</strong></td>
+            <td>Full control over what's injected</td>
+            <td>Delegated to OpenAI's search algorithm</td>
+          </tr>
+          <tr>
+            <td><strong>Caching</strong></td>
+            <td>Prompt caching (90% cost reduction)</td>
+            <td>Not exposed (handled internally)</td>
+          </tr>
+          <tr>
+            <td><strong>Context Window</strong></td>
+            <td>200K tokens</td>
+            <td>128K tokens (GPT-4o)</td>
+          </tr>
+          <tr>
+            <td><strong>File Format</strong></td>
+            <td>Markdown (SKILL.md)</td>
+            <td>Any format (PDF, TXT, MD, DOCX)</td>
+          </tr>
+          <tr>
+            <td><strong>Skill Updates</strong></td>
+            <td>Edit files → restart server</td>
+            <td>Re-upload files → vector reindex</td>
+          </tr>
+          <tr>
+            <td><strong>Cost Model</strong></td>
+            <td>Pay per token (selection + generation)</td>
+            <td>Pay per token + vector storage</td>
+          </tr>
+          <tr>
+            <td><strong>Latency</strong></td>
+            <td>2 API calls (selection → generation)</td>
+            <td>1 API call (search + generation combined)</td>
+          </tr>
+          <tr>
+            <td><strong>Best For</strong></td>
+            <td>Maximum control, on-prem, sensitive data</td>
+            <td>Quick setup, managed service, rapid iteration</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🤔 Which Should You Choose?</div>
+        <div class="highlight-content">
+          <strong>Choose Claude</strong> if you need full control, plan to self-host, or have compliance requirements (SOC 2, HIPAA).<br>
+          <strong>Choose OpenAI</strong> if you want a managed solution, prefer automatic skill retrieval, or need multi-format file support.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 12: Advanced Patterns
+  {
+    title: 'Advanced Patterns',
+    subtitle: 'Taking skills to the next level',
+    content: `
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">🔗</div>
+          <div class="feature-title">Skill Composition</div>
+          <div class="feature-desc">Skills can reference other skills. "react-forms" skill might auto-include "validation" and "state-management"</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">User-Specific Skills</div>
+          <div class="feature-desc">Different skill sets per user role. Admins see "deployment" skills, developers see "testing" skills</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Analytics & Metrics</div>
+          <div class="feature-desc">Track which skills are selected most often, confidence scores over time, skill effectiveness</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🧪</div>
+          <div class="feature-title">A/B Testing</div>
+          <div class="feature-desc">Test different skill content or selection strategies to optimize response quality</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🔄</div>
+          <div class="feature-title">Multi-Turn Refinement</div>
+          <div class="feature-desc">After first response, re-run selection to fetch additional skills if needed</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-title">Skill Marketplace</div>
+          <div class="feature-desc">Share skills across teams or organizations. Community-contributed skill libraries</div>
+        </div>
+      </div>
+
+      <div class="code-block" data-label="SKILL COMPOSITION EXAMPLE">
+<pre>---
+name: "Full Stack Form"
+description: "Complete form implementation pattern"
+dependencies:
+  - react-components
+  - validation
+  - api-integration
+  - error-handling
+---
+
+# Full Stack Form Pattern
+
+This skill combines multiple sub-skills to provide
+a complete form implementation guide.
+
+(Automatically includes content from all dependencies)
+</pre>
+      </div>
+    `
+  },
+
+  // Slide 13: Implementation Checklist
+  {
+    title: 'Implementation Checklist',
+    subtitle: 'How to build your own skill system',
+    content: `
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">1</div>
+          <div class="flow-content">
+            <div class="flow-label">Define Skill Schema</div>
+            <div class="flow-desc">Decide frontmatter fields: name, description, tags, version, dependencies</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">2</div>
+          <div class="flow-content">
+            <div class="flow-label">Build Skill Indexer</div>
+            <div class="flow-desc">Scan skills/ folder on startup, parse frontmatter, build in-memory index</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">3</div>
+          <div class="flow-content">
+            <div class="flow-label">Implement Selection API</div>
+            <div class="flow-desc">Accept user prompt, send to selection model with skill index, return selected skills</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">4</div>
+          <div class="flow-content">
+            <div class="flow-label">Build Content Loader</div>
+            <div class="flow-desc">Read full content of selected skills from disk, strip frontmatter</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">5</div>
+          <div class="flow-content">
+            <div class="flow-label">Create Prompt Augmenter</div>
+            <div class="flow-desc">Combine original prompt + skill documentation into augmented prompt</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">6</div>
+          <div class="flow-content">
+            <div class="flow-label">Implement Generation API</div>
+            <div class="flow-desc">Send augmented prompt to generation model, return response</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">7</div>
+          <div class="flow-content">
+            <div class="flow-label">Add Visualization</div>
+            <div class="flow-desc">Build UI to show selected skills, confidence scores, augmented prompt (like your React visualizer!)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">📦 Reference Implementation</div>
+        <div class="highlight-content">
+          Your <strong>agent-skill-visualizer</strong> project is a complete working example! Check out:<br>
+          • <code>backend/server.js</code> — Skill indexing + selection + augmentation<br>
+          • <code>src/App.tsx</code> — React visualization with real-time SSE updates<br>
+          • <code>backend/skills/</code> — Example skill structure
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 14: Real-World Use Cases
+  {
+    title: 'Real-World Use Cases',
+    subtitle: 'Where skills shine in production',
+    content: `
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-title">Enterprise Chatbot</div>
+          <div class="problem-desc">
+            Company has 500+ internal tools and APIs. Can't fit all docs in one prompt.
+          </div>
+          <div class="solution">Create 500 skills (one per tool). Selection model picks relevant 3-5 for each query.</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">Code Generation IDE</div>
+          <div class="problem-desc">
+            IDE needs to understand project conventions, component library, API patterns.
+          </div>
+          <div class="solution">Skills for design system, architecture patterns, testing conventions. Injected when user generates code.</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">Customer Support Bot</div>
+          <div class="problem-desc">
+            Different products, different documentation, different troubleshooting flows.
+          </div>
+          <div class="solution">Product-specific skills + troubleshooting playbooks. Selection based on user's product context.</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-title">DevOps Assistant</div>
+          <div class="problem-desc">
+            Need to guide engineers through deployments, rollbacks, incident response.
+          </div>
+          <div class="solution">Skills for each infrastructure component (AWS, K8s, monitoring). Runbook-as-a-skill pattern.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Case Study</div>
+        <div class="card-title">Stripe's Documentation Bot</div>
+        <div class="card-content">
+          Stripe uses a skill-based system to power their documentation assistant. Each API resource (Payments, Customers, Subscriptions) is a skill. When developers ask "How do I create a subscription?", the system selects the Subscriptions skill + Pricing skill + Webhooks skill, then generates a complete, context-aware tutorial with their actual API keys pre-filled.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 15: Prompt Augmentation Explained
+  {
+    title: 'What is Prompt Augmentation?',
+    subtitle: 'Enriching prompts with contextual knowledge',
+    content: `
+      <div class="card">
+        <div class="card-header">Core Concept</div>
+        <div class="card-title">Augmentation = Original Prompt + Selected Skills</div>
+        <div class="card-content">
+          Prompt augmentation is the process of combining the user's original prompt with relevant documentation from selected skills. Instead of sending just the user's question, we send an enriched prompt that includes all the context needed for a high-quality response.
+        </div>
+      </div>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">📝</div>
+          <div class="flow-content">
+            <div class="flow-label">Original User Prompt</div>
+            <div class="flow-desc">"Add a dark mode toggle to the settings page"</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">🎯</div>
+          <div class="flow-content">
+            <div class="flow-label">Skills Selected</div>
+            <div class="flow-desc">design-system, theme-config, react-components</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">📚</div>
+          <div class="flow-content">
+            <div class="flow-label">Skills Loaded</div>
+            <div class="flow-desc">Full documentation content for the 3 selected skills (~8KB)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">✨</div>
+          <div class="flow-content">
+            <div class="flow-label">Augmented Prompt Created</div>
+            <div class="flow-desc">Original prompt + skill documentation combined into one enriched context</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block" data-label="AUGMENTED PROMPT STRUCTURE">
+<pre>===== AUGMENTED PROMPT SENT TO LLM =====
+
+[SKILL: Design System]
+Your app uses a ThemeProvider from styled-components.
+Colors are defined in src/theme/colors.ts...
+All components should use theme.colors.primary...
+
+[SKILL: Theme Configuration]
+Themes: 'light' and 'dark' are available.
+Toggle using setTheme() from useTheme() hook...
+Store preference in localStorage('theme-mode')...
+
+[SKILL: React Components]
+All UI components are in src/components/...
+Buttons use the Button component with variant prop...
+Toggle switches use Switch component...
+
+[USER REQUEST]
+Add a dark mode toggle to the settings page
+
+===== END AUGMENTED PROMPT =====
+</pre>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🎯 Why Augmentation Works</div>
+        <div class="highlight-content">
+          Without augmentation, the LLM would generate <strong>generic dark mode code</strong> that doesn't match your patterns. With augmentation, it knows your exact theme system, component library, and conventions — resulting in code that's <strong>ready to merge</strong>.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 16: Final Response Generation
+  {
+    title: 'Final Response Generation',
+    subtitle: 'From augmented prompt to actionable output',
+    content: `
+      <div class="card">
+        <div class="card-header">Final Step</div>
+        <div class="card-title">Generation Model Produces Context-Aware Response</div>
+        <div class="card-content">
+          After prompt augmentation, the enriched context is sent to a powerful generation model (like Sonnet 4.6). This model reads the original question plus all relevant documentation and produces a high-quality, project-specific response that follows your exact patterns and conventions.
+        </div>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-title">
+            <span class="compare-badge claude">WITHOUT SKILLS</span>
+          </div>
+          <div class="code-block" data-label="GENERIC RESPONSE">
+<pre>// Generic dark mode implementation
+const [theme, setTheme] = useState('light');
+
+function toggleTheme() {
+  setTheme(theme === 'light' ? 'dark' : 'light');
+}
+
+&lt;button onClick={toggleTheme}&gt;
+  Toggle Dark Mode
+&lt;/button&gt;
+</pre>
+          </div>
+          <div class="card-content" style="color: var(--warn);">
+            ❌ Doesn't use your theme system<br>
+            ❌ Wrong component library<br>
+            ❌ No localStorage persistence<br>
+            ❌ Doesn't match your patterns
+          </div>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-title">
+            <span class="compare-badge openai">WITH SKILLS</span>
+          </div>
+          <div class="code-block" data-label="PROJECT-SPECIFIC RESPONSE">
+<pre>// Using your exact patterns
+import { useTheme } from '@/hooks/useTheme';
+import { Switch } from '@/components/Switch';
+
+function SettingsPage() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    &lt;Switch
+      checked={theme === 'dark'}
+      onChange={(checked) =>
+        setTheme(checked ? 'dark' : 'light')
+      }
+      label="Dark Mode"
+    /&gt;
+  );
+}
+</pre>
+          </div>
+          <div class="card-content" style="color: var(--ok);">
+            ✅ Uses your ThemeProvider hook<br>
+            ✅ Correct Switch component<br>
+            ✅ Follows your file structure<br>
+            ✅ Matches coding conventions
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">⚡ The Magic of Context</div>
+        <div class="highlight-content">
+          The generation model has <strong>200K tokens of context</strong> available. By selectively loading only relevant skills (2-5 skills, ~10KB), we maximize quality while staying well within limits. The model "sees" your documentation as if it wrote your codebase.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 17: Working Demo - Agent Skills Visualizer
+  {
+    title: 'Live Demo: Agent Skills Visualizer',
+    subtitle: 'See the entire pipeline in real-time',
+    content: `
+      <div class="card">
+        <div class="card-header">Interactive Visualization</div>
+        <div class="card-title">Watch Skills Get Selected, Loaded & Augmented</div>
+        <div class="card-content">
+          The <strong>Agent Skills Visualizer</strong> is a React application that demonstrates the complete skill system pipeline in real-time. As you submit prompts, you can watch the selection model choose relevant skills, see confidence scores, view the augmented prompt, and read the final generated response — all visualized step-by-step.
+        </div>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Real-Time Visualization</div>
+          <div class="feature-desc">See skill selection happening live with SSE (Server-Sent Events)</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Confidence Scores</div>
+          <div class="feature-desc">Each selected skill shows its relevance score (0.0 - 1.0)</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📝</div>
+          <div class="feature-title">Augmented Prompt Display</div>
+          <div class="feature-desc">View the full enriched prompt sent to the generation model</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Streaming Response</div>
+          <div class="feature-desc">Watch the final response generate token-by-token</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🔧</div>
+          <div class="feature-title">Skill Management</div>
+          <div class="feature-desc">Add, edit, and organize skills through the file system</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📈</div>
+          <div class="feature-title">Performance Metrics</div>
+          <div class="feature-desc">Track selection time, token usage, and API latency</div>
+        </div>
+      </div>
+
+      <div class="code-block" data-label="PROJECT STRUCTURE">
+<pre>agent-skill-visualizer/
+├── src/
+│   ├── App.tsx              ← Main React component with visualization
+│   ├── components/
+│   │   ├── PromptInput.tsx
+│   │   ├── SkillCard.tsx
+│   │   └── ResponseView.tsx
+│   └── hooks/
+│       └── useSkillStream.ts ← SSE hook for real-time updates
+├── backend/
+│   ├── server.js             ← Express server with skill system
+│   ├── skills/
+│   │   ├── react-patterns/
+│   │   │   └── SKILL.md
+│   │   ├── api-design/
+│   │   │   └── SKILL.md
+│   │   └── testing/
+│   │       └── SKILL.md
+│   └── lib/
+│       ├── skillSelector.js  ← Selection logic
+│       └── promptAugmenter.js ← Augmentation logic
+└── README.md
+</pre>
+      </div>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">1</div>
+          <div class="flow-content">
+            <div class="flow-label">Start Backend Server</div>
+            <div class="flow-desc">npm run server — Starts Express on :3001, indexes skills</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">2</div>
+          <div class="flow-content">
+            <div class="flow-label">Start React Frontend</div>
+            <div class="flow-desc">npm run dev — Vite dev server on :5173</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">3</div>
+          <div class="flow-content">
+            <div class="flow-label">Enter a Prompt</div>
+            <div class="flow-desc">Type your request in the input field</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">4</div>
+          <div class="flow-content">
+            <div class="flow-label">Watch the Magic</div>
+            <div class="flow-desc">See skills get selected, content loaded, prompt augmented, and response generated — all in real-time!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🚀 Try It Now</div>
+        <div class="highlight-content">
+          <strong>Getting Started:</strong><br>
+          1. cd agent-skill-visualizer<br>
+          2. npm install<br>
+          3. Add your API keys to .env (ANTHROPIC_API_KEY or OPENAI_API_KEY)<br>
+          4. npm run server (terminal 1)<br>
+          5. npm run dev (terminal 2)<br>
+          6. Open http://localhost:5173 and start experimenting!<br>
+          <br>
+          <strong>Experiment Ideas:</strong><br>
+          • Add custom skills for your domain<br>
+          • Adjust confidence thresholds<br>
+          • Compare selection between different models<br>
+          • Monitor token usage and costs
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 18: Conclusion
+  {
+    title: 'Key Takeaways',
+    subtitle: 'Everything you need to remember',
+    content: `
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">2×</div>
+          <div class="stat-label">Two-step process</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Scalable to unlimited skills</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">⚡</div>
+          <div class="stat-label">Lazy loading = fast</div>
+        </div>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Prompts are Instructions</div>
+          <div class="feature-desc">The quality of your prompt determines the quality of the response</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Skills = Modular Knowledge</div>
+          <div class="feature-desc">Self-contained documentation bundles for specific topics</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Two Models = Cost Efficiency</div>
+          <div class="feature-desc">Fast/cheap for selection, powerful for generation</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Frontmatter = Fast Indexing</div>
+          <div class="feature-desc">Selection never reads full content, only metadata</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Lazy Loading = Scalability</div>
+          <div class="feature-desc">Full content loaded only after selection</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Augmentation = Context</div>
+          <div class="feature-desc">Enriched prompts produce project-specific responses</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">File-Based = Easy Updates</div>
+          <div class="feature-desc">Edit markdown files, no deployment needed</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Not Just Code</div>
+          <div class="feature-desc">Patterns, processes, policies — anything documentable</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">✅</div>
+          <div class="feature-title">Visualize the Pipeline</div>
+          <div class="feature-desc">Use the agent-skill-visualizer to see it all in action</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🚀 Next Steps</div>
+        <div class="highlight-content">
+          <strong>Try it yourself:</strong><br>
+          1. Clone or navigate to the agent-skill-visualizer repo<br>
+          2. Add your own skills to backend/skills/<br>
+          3. Watch the real-time visualization as skills are selected<br>
+          4. Experiment with different selection models and strategies<br>
+          5. Build your own skill-based agent system<br>
+          <br>
+          <strong>Remember:</strong> The agent-skill-visualizer is your reference implementation — explore the code, modify it, and make it your own!
+        </div>
+      </div>
+    `
+  },
+];
+
+// State
+let currentSlide = 0;
+
+// Navigation
+function navigate(direction) {
+  const newSlide = currentSlide + direction;
+  if (newSlide >= 0 && newSlide < SLIDES.length) {
+    currentSlide = newSlide;
+    render();
+  }
+}
+
+function goToSlide(index) {
+  if (index >= 0 && index < SLIDES.length) {
+    currentSlide = index;
+    render();
+  }
+}
+
+// Render
+function render() {
+  const slide = SLIDES[currentSlide];
+
+  // Update slide content
+  document.getElementById('slide-content').innerHTML = `
+    <div class="slide-title">${slide.title}</div>
+    <div class="slide-subtitle">${slide.subtitle}</div>
+    ${slide.content}
+  `;
+
+  // Update progress bar
+  let progressHTML = '';
+  SLIDES.forEach((_, i) => {
+    const isDone = i < currentSlide;
+    const isActive = i === currentSlide;
+    const classes = ['progress-dot'];
+    if (isDone) classes.push('done');
+    if (isActive) classes.push('active');
+
+    progressHTML += `<div class="${classes.join(' ')}" onclick="goToSlide(${i})" title="Slide ${i + 1}"></div>`;
+
+    if (i < SLIDES.length - 1) {
+      progressHTML += `<div class="progress-line ${i < currentSlide ? 'done' : ''}"></div>`;
+    }
+  });
+
+  document.getElementById('progress-bar').innerHTML = progressHTML;
+
+  // Update counter
+  document.getElementById('current-slide').textContent = currentSlide + 1;
+  document.getElementById('total-slides').textContent = SLIDES.length;
+
+  // Update buttons
+  document.getElementById('btn-prev').disabled = currentSlide === 0;
+  document.getElementById('btn-next').disabled = currentSlide === SLIDES.length - 1;
+
+  // Scroll to top
+  document.getElementById('slide-container').scrollTop = 0;
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') navigate(-1);
+  if (e.key === 'ArrowRight') navigate(1);
+});
+
+// Initialize
+render();
+</script>
+</body>
+</html>

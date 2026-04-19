@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IntelliOps Design System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #ffffff;
+      color: #1e293b;
+      line-height: 1.5;
+      padding: 32px;
+      font-size: 12px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        padding: 0;
+        font-size: 11px;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+
+      section {
+        page-break-inside: avoid;
+      }
+
+      .color-scale {
+        page-break-inside: avoid;
+      }
+
+      .color-grid {
+        page-break-inside: avoid;
+      }
+
+      .no-break {
+        page-break-inside: avoid;
+      }
+
+      h2, h3 {
+        page-break-after: avoid;
+      }
+    }
+
+    /* Header - Dark background for better text visibility */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 48px 40px;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+      border-radius: 16px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(81, 83, 246, 0.3) 0%, rgba(236, 134, 250, 0.2) 100%);
+      pointer-events: none;
+    }
+
+    .header h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .header p {
+      font-size: 18px;
+      color: #e0e7ff;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header .version {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #c7d2fe;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Section */
+    section {
+      margin-bottom: 40px;
+      page-break-inside: avoid;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1e1b4b;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid #5153f6;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #334155;
+      margin: 20px 0 12px;
+      page-break-after: avoid;
+    }
+
+    p.desc {
+      color: #64748b;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    /* Color Scale Row */
+    .color-scale {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      page-break-inside: avoid;
+    }
+
+    .color-scale-item {
+      flex: 1;
+      padding: 16px 4px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .color-scale-item span {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .color-scale-item .hex {
+      font-family: monospace;
+      font-size: 8px;
+      margin-top: 2px;
+      opacity: 0.9;
+    }
+
+    /* Color Grid */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+      page-break-inside: avoid;
+    }
+
+    .color-grid.grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .color-grid.grid-6 {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .color-swatch {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+    }
+
+    .color-preview {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .color-info {
+      padding: 8px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .color-name {
+      font-weight: 600;
+      font-size: 11px;
+      color: #1e293b;
+    }
+
+    .color-value {
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 9px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .color-usage {
+      font-size: 9px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* Table of Contents */
+    .toc {
+      background: #f8fafc;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+      border: 1px solid #e2e8f0;
+      page-break-inside: avoid;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #1e1b4b;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .toc-item {
+      padding: 8px 12px;
+      background: white;
+      border-radius: 6px;
+      font-size: 11px;
+      color: #5153f6;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: 11px;
+      margin-bottom: 20px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .data-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #475569;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .data-table td:first-child {
+      font-family: monospace;
+      color: #5153f6;
+      font-weight: 500;
+    }
+
+    /* Spacing Grid */
+    .spacing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      page-break-inside: avoid;
+    }
+
+    .spacing-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .spacing-visual {
+      background: linear-gradient(135deg, #5153f6, #7c3aed);
+      height: 20px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .spacing-name {
+      font-weight: 600;
+      font-size: 11px;
+      color: #1e293b;
+    }
+
+    .spacing-value {
+      font-family: monospace;
+      font-size: 10px;
+      color: #64748b;
+    }
+
+    /* Typography samples */
+    .type-grid {
+      display: grid;
+      gap: 8px;
+      page-break-inside: avoid;
+    }
+
+    .type-item {
+      background: white;
+      padding: 12px 16px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .type-label {
+      font-family: monospace;
+      font-size: 10px;
+      color: #64748b;
+      min-width: 180px;
+      flex-shrink: 0;
+    }
+
+    .type-sample {
+      color: #1e293b;
+    }
+
+    /* Shadow Grid */
+    .shadow-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      page-break-inside: avoid;
+    }
+
+    .shadow-item {
+      background: white;
+      padding: 24px 16px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .shadow-item .name {
+      font-weight: 600;
+      font-size: 11px;
+      margin-top: 12px;
+      color: #1e293b;
+    }
+
+    .shadow-item .usage {
+      font-size: 9px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Radius Grid */
+    .radius-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 12px;
+      page-break-inside: avoid;
+    }
+
+    .radius-item {
+      background: white;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+
+    .radius-preview {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #5153f6 0%, #ec86fa 100%);
+      margin: 0 auto 8px;
+    }
+
+    .radius-name {
+      font-weight: 600;
+      font-size: 10px;
+      color: #1e293b;
+    }
+
+    .radius-value {
+      font-family: monospace;
+      font-size: 9px;
+      color: #64748b;
+    }
+
+    /* Animation Grid */
+    .animation-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      page-break-inside: avoid;
+    }
+
+    .animation-item {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .animation-name {
+      font-weight: 600;
+      font-size: 11px;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .animation-value {
+      font-family: monospace;
+      font-size: 9px;
+      color: #64748b;
+      background: #f8fafc;
+      padding: 4px 6px;
+      border-radius: 4px;
+    }
+
+    /* Gradient Grid */
+    .gradient-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      page-break-inside: avoid;
+    }
+
+    .gradient-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .gradient-preview {
+      height: 60px;
+    }
+
+    .gradient-info {
+      padding: 8px;
+      background: white;
+    }
+
+    .gradient-name {
+      font-weight: 600;
+      font-size: 11px;
+      color: #1e293b;
+    }
+
+    .gradient-usage {
+      font-size: 9px;
+      color: #64748b;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      color: #94a3b8;
+      font-size: 11px;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 40px;
+    }
+
+    /* Page break utility */
+    .page-break {
+      page-break-before: always;
+      padding-top: 20px;
+    }
+
+    .no-break {
+      page-break-inside: avoid;
+    }
+
+    /* Two column layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .two-col > div {
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>IntelliOps Design System</h1>
+      <p>Comprehensive Design Tokens & Guidelines</p>
+      <div class="version">Version 1.0 | March 2026</div>
+    </header>
+
+    <!-- Table of Contents -->
+    <div class="toc no-break">
+      <h3>Table of Contents</h3>
+      <div class="toc-grid">
+        <div class="toc-item">1. Primary Colors</div>
+        <div class="toc-item">2. Secondary Colors</div>
+        <div class="toc-item">3. Neutral Scale</div>
+        <div class="toc-item">4. Elevation</div>
+        <div class="toc-item">5. Text Hierarchy</div>
+        <div class="toc-item">6. Border System</div>
+        <div class="toc-item">7. Semantic Colors</div>
+        <div class="toc-item">8. Status Colors</div>
+        <div class="toc-item">9. Chart Colors</div>
+        <div class="toc-item">10. Node Colors</div>
+        <div class="toc-item">11. Spacing</div>
+        <div class="toc-item">12. Typography</div>
+        <div class="toc-item">13. Shadows</div>
+        <div class="toc-item">14. Border Radius</div>
+        <div class="toc-item">15. Z-Index</div>
+        <div class="toc-item">16. Animations</div>
+      </div>
+    </div>
+
+    <!-- 1. Primary Colors -->
+    <section class="no-break">
+      <h2>1. Primary Brand Colors (Purple/Blue)</h2>
+      <p class="desc">The primary palette is used for main CTAs, links, and brand identity. Base color: primary-500 (#5153f6)</p>
+      <div class="color-scale">
+        <div class="color-scale-item" style="background: #eef2ff; color: #1e1b4b;">
+          <span>50</span>
+          <span class="hex">#eef2ff</span>
+        </div>
+        <div class="color-scale-item" style="background: #dce0fe; color: #1e1b4b;">
+          <span>100</span>
+          <span class="hex">#dce0fe</span>
+        </div>
+        <div class="color-scale-item" style="background: #b9bdfc; color: #1e1b4b;">
+          <span>200</span>
+          <span class="hex">#b9bdfc</span>
+        </div>
+        <div class="color-scale-item" style="background: #9699fa; color: #1e1b4b;">
+          <span>300</span>
+          <span class="hex">#9699fa</span>
+        </div>
+        <div class="color-scale-item" style="background: #7376f8; color: white;">
+          <span>400</span>
+          <span class="hex">#7376f8</span>
+        </div>
+        <div class="color-scale-item" style="background: #5153f6; color: white;">
+          <span>500</span>
+          <span class="hex">#5153f6</span>
+        </div>
+        <div class="color-scale-item" style="background: #3f42d4; color: white;">
+          <span>600</span>
+          <span class="hex">#3f42d4</span>
+        </div>
+        <div class="color-scale-item" style="background: #3435a6; color: white;">
+          <span>700</span>
+          <span class="hex">#3435a6</span>
+        </div>
+        <div class="color-scale-item" style="background: #292878; color: white;">
+          <span>800</span>
+          <span class="hex">#292878</span>
+        </div>
+        <div class="color-scale-item" style="background: #1e1b4b; color: white;">
+          <span>900</span>
+          <span class="hex">#1e1b4b</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Secondary Colors -->
+    <section class="no-break">
+      <h2>2. Secondary Accent Colors (Pink/Magenta)</h2>
+      <p class="desc">Used for highlights, accents, and secondary actions. Base color: secondary-500 (#ec86fa)</p>
+      <div class="color-scale">
+        <div class="color-scale-item" style="background: #fef8fe; color: #2f1a31;">
+          <span>50</span>
+          <span class="hex">#fef8fe</span>
+        </div>
+        <div class="color-scale-item" style="background: #fcebfd; color: #2f1a31;">
+          <span>100</span>
+          <span class="hex">#fcebfd</span>
+        </div>
+        <div class="color-scale-item" style="background: #f8d2fc; color: #2f1a31;">
+          <span>200</span>
+          <span class="hex">#f8d2fc</span>
+        </div>
+        <div class="color-scale-item" style="background: #f4b8fb; color: #2f1a31;">
+          <span>300</span>
+          <span class="hex">#f4b8fb</span>
+        </div>
+        <div class="color-scale-item" style="background: #f09ffa; color: #2f1a31;">
+          <span>400</span>
+          <span class="hex">#f09ffa</span>
+        </div>
+        <div class="color-scale-item" style="background: #ec86fa; color: white;">
+          <span>500</span>
+          <span class="hex">#ec86fa</span>
+        </div>
+        <div class="color-scale-item" style="background: #c871d4; color: white;">
+          <span>600</span>
+          <span class="hex">#c871d4</span>
+        </div>
+        <div class="color-scale-item" style="background: #95549d; color: white;">
+          <span>700</span>
+          <span class="hex">#95549d</span>
+        </div>
+        <div class="color-scale-item" style="background: #623667; color: white;">
+          <span>800</span>
+          <span class="hex">#623667</span>
+        </div>
+        <div class="color-scale-item" style="background: #2f1a31; color: white;">
+          <span>900</span>
+          <span class="hex">#2f1a31</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Neutral Scale -->
+    <section class="no-break">
+      <h2>3. Neutral Gray Scale</h2>
+      <p class="desc">Used for backgrounds, text, borders, and UI chrome.</p>
+      <div class="color-scale">
+        <div class="color-scale-item" style="background: #f9fafb; color: #111827;">
+          <span>50</span>
+          <span class="hex">#f9fafb</span>
+        </div>
+        <div class="color-scale-item" style="background: #f3f4f6; color: #111827;">
+          <span>100</span>
+          <span class="hex">#f3f4f6</span>
+        </div>
+        <div class="color-scale-item" style="background: #e5e7eb; color: #111827;">
+          <span>200</span>
+          <span class="hex">#e5e7eb</span>
+        </div>
+        <div class="color-scale-item" style="background: #d1d5db; color: #111827;">
+          <span>300</span>
+          <span class="hex">#d1d5db</span>
+        </div>
+        <div class="color-scale-item" style="background: #9ca3af; color: #111827;">
+          <span>400</span>
+          <span class="hex">#9ca3af</span>
+        </div>
+        <div class="color-scale-item" style="background: #6b7280; color: white;">
+          <span>500</span>
+          <span class="hex">#6b7280</span>
+        </div>
+        <div class="color-scale-item" style="background: #4b5563; color: white;">
+          <span>600</span>
+          <span class="hex">#4b5563</span>
+        </div>
+        <div class="color-scale-item" style="background: #374151; color: white;">
+          <span>700</span>
+          <span class="hex">#374151</span>
+        </div>
+        <div class="color-scale-item" style="background: #1f2937; color: white;">
+          <span>800</span>
+          <span class="hex">#1f2937</span>
+        </div>
+        <div class="color-scale-item" style="background: #111827; color: white;">
+          <span>900</span>
+          <span class="hex">#111827</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <!-- 4. Elevation -->
+    <section>
+      <h2>4. Elevation & Surfaces</h2>
+      <p class="desc">Material Design elevation levels for visual hierarchy. Each level indicates depth and importance.</p>
+
+      <div class="two-col">
+        <div class="no-break">
+          <h3>Light Mode</h3>
+          <div class="color-grid grid-4" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #f9fafb;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-0</div>
+                <div class="color-value">#f9fafb</div>
+                <div class="color-usage">Base canvas</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #ffffff;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-1</div>
+                <div class="color-value">#ffffff</div>
+                <div class="color-usage">Cards</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #ffffff;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-2</div>
+                <div class="color-value">#ffffff</div>
+                <div class="color-usage">Elevated</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #ffffff;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-3</div>
+                <div class="color-value">#ffffff</div>
+                <div class="color-usage">Modals</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #ffffff;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-4</div>
+                <div class="color-value">#ffffff</div>
+                <div class="color-usage">Highest</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="no-break">
+          <h3>Dark Mode</h3>
+          <div class="color-grid grid-4" style="grid-template-columns: repeat(5, 1fr);">
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #171d2c;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-0</div>
+                <div class="color-value">#171d2c</div>
+                <div class="color-usage">Base canvas</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #20252f;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-1</div>
+                <div class="color-value">#20252f</div>
+                <div class="color-usage">Cards</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #232938;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-2</div>
+                <div class="color-value">#232938</div>
+                <div class="color-usage">Elevated</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #2a3140;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-3</div>
+                <div class="color-value">#2a3140</div>
+                <div class="color-usage">Modals</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #313949;"></div>
+              <div class="color-info">
+                <div class="color-name">elevation-4</div>
+                <div class="color-value">#313949</div>
+                <div class="color-usage">Highest</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Text Hierarchy -->
+    <section>
+      <h2>5. Text Hierarchy</h2>
+      <p class="desc">Text colors follow a progressive emphasis scale, ensuring WCAG AA compliance.</p>
+
+      <div class="two-col">
+        <div class="no-break">
+          <h3>Light Mode</h3>
+          <div class="color-grid grid-4">
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #f9fafb;">
+                <span style="color: #111827; font-weight: 600; font-size: 18px;">Aa</span>
+              </div>
+              <div class="color-info">
+                <div class="color-name">text-primary</div>
+                <div class="color-value">~15:1 contrast</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #f9fafb;">
+                <span style="color: #4b5563; font-size: 18px;">Aa</span>
+              </div>
+              <div class="color-info">
+                <div class="color-name">text-secondary</div>
+                <div class="color-value">~7:1 contrast</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #f9fafb;">
+                <span style="color: #6b7280; font-size: 18px;">Aa</span>
+              </div>
+              <div class="color-info">
+                <div class="color-name">text-tertiary</div>
+                <div class="color-value">~4.5:1 contrast</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #f9fafb;">
+                <span style="color: #9ca3af; font-size: 18px;">Aa</span>
+              </div>
+              <div class="color-info">
+                <div class="color-name">text-disabled</div>
+                <div class="color-value">~3:1 contrast</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="no-break">
+          <h3>Dark Mode</h3>
+          <div class="color-grid grid-4">
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #171d2c;">
+                <span style="color: #f0f1f5; font-weight: 600; font-size: 18px;">Aa</span>
+              </div>
+              <div class="color-info">
+                <div class="color-name">text-primary</div>
+                <div class="color-value">~12:1 contrast</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #171d2c;">
+                <span style="color: #c4c8cf; font-size: 18px;">Aa</span>
+              </div>
+              <div class="color-info">
+                <div class="color-name">text-secondary</div>
+                <div class="color-value">~8:1 contrast</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #171d2c;">
+                <span style="color: #9ba1ab; font-size: 18px;">Aa</span>
+              </div>
+              <div class="color-info">
+                <div class="color-name">text-tertiary</div>
+                <div class="color-value">~5.5:1 contrast</div>
+              </div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-preview" style="background: #171d2c;">
+                <span style="color: #6b7078; font-size: 18px;">Aa</span>
+              </div>
+              <div class="color-info">
+                <div class="color-name">text-disabled</div>
+                <div class="color-value">Disabled</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Border System -->
+    <section class="no-break">
+      <h2>6. Border System</h2>
+      <p class="desc">Progressive border visibility for visual hierarchy and separation.</p>
+
+      <div class="color-grid grid-4" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f9fafb; border: 4px solid #d9dce2;"></div>
+          <div class="color-info">
+            <div class="color-name">border-subtle</div>
+            <div class="color-value">hsl(220, 13%, 86%)</div>
+            <div class="color-usage">Soft dividers</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f9fafb; border: 4px solid #c4c9d1;"></div>
+          <div class="color-info">
+            <div class="color-name">border-default</div>
+            <div class="color-value">hsl(220, 13%, 78%)</div>
+            <div class="color-usage">Standard borders</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f9fafb; border: 4px solid #9ca3af;"></div>
+          <div class="color-info">
+            <div class="color-name">border-strong</div>
+            <div class="color-value">hsl(220, 9%, 65%)</div>
+            <div class="color-usage">Emphasized</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f9fafb; border: 4px solid #5153f6;"></div>
+          <div class="color-info">
+            <div class="color-name">border-interactive</div>
+            <div class="color-value">#5153f6</div>
+            <div class="color-usage">Focus/active</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Border Width Scale</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Value</th>
+            <th>Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>border-0.5</td><td>0.5px</td><td>Hairline borders (ultra-subtle)</td></tr>
+          <tr><td>border-1</td><td>1px</td><td>Standard border (default)</td></tr>
+          <tr><td>border-2</td><td>2px</td><td>Medium emphasis</td></tr>
+          <tr><td>border-4</td><td>4px</td><td>Strong emphasis</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <!-- 7. Semantic Colors -->
+    <section>
+      <h2>7. Semantic Status Colors</h2>
+      <p class="desc">Status colors with full palettes for backgrounds, borders, and text variations.</p>
+
+      <div class="color-grid grid-4" style="margin-bottom: 16px;">
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #22c55e;"></div>
+          <div class="color-info">
+            <div class="color-name">success</div>
+            <div class="color-value">#22c55e</div>
+            <div class="color-usage">Success states</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f59e0b;"></div>
+          <div class="color-info">
+            <div class="color-name">warning</div>
+            <div class="color-value">#f59e0b</div>
+            <div class="color-usage">Warning states</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f46969;"></div>
+          <div class="color-info">
+            <div class="color-name">error</div>
+            <div class="color-value">#f46969</div>
+            <div class="color-usage">Error/danger</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #3b82f6;"></div>
+          <div class="color-info">
+            <div class="color-name">info</div>
+            <div class="color-value">#3b82f6</div>
+            <div class="color-usage">Informational</div>
+          </div>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Base</th>
+            <th>Background Subtle</th>
+            <th>Border</th>
+            <th>Text (AA)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Success</td><td>#22c55e</td><td>Light green</td><td>#16a34a</td><td>~5.5:1 contrast</td></tr>
+          <tr><td>Warning</td><td>#f59e0b</td><td>Light amber</td><td>#d97706</td><td>~5:1 contrast</td></tr>
+          <tr><td>Error</td><td>#f46969</td><td>Light red</td><td>#e02424</td><td>~5.5:1 contrast</td></tr>
+          <tr><td>Info</td><td>#3b82f6</td><td>Light blue</td><td>#2563eb</td><td>~6:1 contrast</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 8. Status Badge Colors -->
+    <section class="no-break">
+      <h2>8. Status Badge Colors</h2>
+      <p class="desc">Extended status indicators for various application states.</p>
+
+      <div class="color-grid grid-6">
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f59e0b;"></div>
+          <div class="color-info">
+            <div class="color-name">pending</div>
+            <div class="color-value">Amber</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #3b82f6;"></div>
+          <div class="color-info">
+            <div class="color-name">active</div>
+            <div class="color-value">Blue</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #6b7280;"></div>
+          <div class="color-info">
+            <div class="color-name">paused</div>
+            <div class="color-value">Gray</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f46969;"></div>
+          <div class="color-info">
+            <div class="color-name">cancelled</div>
+            <div class="color-value">Red</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #8b5cf6;"></div>
+          <div class="color-info">
+            <div class="color-name">draft</div>
+            <div class="color-value">Purple</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #94a3b8;"></div>
+          <div class="color-info">
+            <div class="color-name">archived</div>
+            <div class="color-value">Slate</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Chart Colors -->
+    <section class="no-break">
+      <h2>9. Chart Colors</h2>
+      <p class="desc">Theme-aware colors optimized for data visualizations.</p>
+
+      <div class="color-grid grid-6">
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #5153f6;"></div>
+          <div class="color-info">
+            <div class="color-name">chart-1</div>
+            <div class="color-value">Primary</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #22c55e;"></div>
+          <div class="color-info">
+            <div class="color-name">chart-2</div>
+            <div class="color-value">Green</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #f59e0b;"></div>
+          <div class="color-info">
+            <div class="color-name">chart-3</div>
+            <div class="color-value">Amber</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #3b82f6;"></div>
+          <div class="color-info">
+            <div class="color-name">chart-4</div>
+            <div class="color-value">Blue</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #ec86fa;"></div>
+          <div class="color-info">
+            <div class="color-name">chart-5</div>
+            <div class="color-value">Pink</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #008272;"></div>
+          <div class="color-info">
+            <div class="color-name">chart-6</div>
+            <div class="color-value">Teal</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Node Colors -->
+    <section class="no-break">
+      <h2>10. Node Colors (Application Mapping)</h2>
+      <p class="desc">Enterprise-standard colors for graph nodes, following Microsoft/Azure style.</p>
+
+      <div class="color-grid" style="grid-template-columns: repeat(5, 1fr);">
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #0078d4;"></div>
+          <div class="color-info">
+            <div class="color-name">application</div>
+            <div class="color-value">#0078d4</div>
+            <div class="color-usage">MS Blue</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #8764b8;"></div>
+          <div class="color-info">
+            <div class="color-name">repo</div>
+            <div class="color-value">#8764b8</div>
+            <div class="color-usage">DevOps Purple</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #d97706;"></div>
+          <div class="color-info">
+            <div class="color-name">pipeline</div>
+            <div class="color-value">#d97706</div>
+            <div class="color-usage">Build Amber</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #008272;"></div>
+          <div class="color-info">
+            <div class="color-name">service</div>
+            <div class="color-value">#008272</div>
+            <div class="color-usage">Azure Teal</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background: #ff8c00;"></div>
+          <div class="color-info">
+            <div class="color-name">connector</div>
+            <div class="color-value">#ff8c00</div>
+            <div class="color-usage">Orange</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <!-- 11. Spacing Scale -->
+    <section class="no-break">
+      <h2>11. Spacing Scale</h2>
+      <p class="desc">Material Design 8px base unit spacing system.</p>
+
+      <div class="spacing-grid">
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 2px;"></div>
+          <div><span class="spacing-name">0.5</span> <span class="spacing-value">0.125rem (2px)</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 4px;"></div>
+          <div><span class="spacing-name">1</span> <span class="spacing-value">0.25rem (4px)</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 8px;"></div>
+          <div><span class="spacing-name">2</span> <span class="spacing-value">0.5rem (8px) - Base</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 12px;"></div>
+          <div><span class="spacing-name">3</span> <span class="spacing-value">0.75rem (12px)</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 16px;"></div>
+          <div><span class="spacing-name">4</span> <span class="spacing-value">1rem (16px)</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 24px;"></div>
+          <div><span class="spacing-name">6</span> <span class="spacing-value">1.5rem (24px)</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 32px;"></div>
+          <div><span class="spacing-name">8</span> <span class="spacing-value">2rem (32px)</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 48px;"></div>
+          <div><span class="spacing-name">12</span> <span class="spacing-value">3rem (48px)</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 64px;"></div>
+          <div><span class="spacing-name">16</span> <span class="spacing-value">4rem (64px)</span></div>
+        </div>
+        <div class="spacing-item">
+          <div class="spacing-visual" style="width: 96px;"></div>
+          <div><span class="spacing-name">24</span> <span class="spacing-value">6rem (96px)</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. Typography -->
+    <section class="no-break">
+      <h2>12. Typography</h2>
+      <p class="desc">Material Design type scale with consistent line heights.</p>
+
+      <div class="type-grid">
+        <div class="type-item">
+          <div class="type-label">text-xs: 0.75rem (12px)</div>
+          <div class="type-sample" style="font-size: 12px;">The quick brown fox jumps over the lazy dog.</div>
+        </div>
+        <div class="type-item">
+          <div class="type-label">text-sm: 0.875rem (14px)</div>
+          <div class="type-sample" style="font-size: 14px;">The quick brown fox jumps over the lazy dog.</div>
+        </div>
+        <div class="type-item">
+          <div class="type-label">text-base: 1rem (16px)</div>
+          <div class="type-sample" style="font-size: 16px;">The quick brown fox jumps over the lazy dog.</div>
+        </div>
+        <div class="type-item">
+          <div class="type-label">text-lg: 1.125rem (18px)</div>
+          <div class="type-sample" style="font-size: 18px;">The quick brown fox jumps over the lazy dog.</div>
+        </div>
+        <div class="type-item">
+          <div class="type-label">text-xl: 1.25rem (20px)</div>
+          <div class="type-sample" style="font-size: 20px;">The quick brown fox jumps over the lazy dog.</div>
+        </div>
+        <div class="type-item">
+          <div class="type-label">text-2xl: 1.5rem (24px)</div>
+          <div class="type-sample" style="font-size: 24px;">The quick brown fox jumps.</div>
+        </div>
+      </div>
+
+      <h3>Font Weights</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Token</th><th>Value</th><th>Sample</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>font-light</td><td>300</td><td style="font-weight: 300;">Light text sample</td></tr>
+          <tr><td>font-normal</td><td>400</td><td style="font-weight: 400;">Normal text sample</td></tr>
+          <tr><td>font-medium</td><td>500</td><td style="font-weight: 500;">Medium text sample</td></tr>
+          <tr><td>font-semibold</td><td>600</td><td style="font-weight: 600;">Semibold text sample</td></tr>
+          <tr><td>font-bold</td><td>700</td><td style="font-weight: 700;">Bold text sample</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <!-- 13. Shadows -->
+    <section class="no-break">
+      <h2>13. Shadows</h2>
+      <p class="desc">Material Design elevation system with progressive depth.</p>
+
+      <div class="shadow-grid">
+        <div class="shadow-item" style="box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+          <div class="name">shadow-sm</div>
+          <div class="usage">Subtle elevation</div>
+        </div>
+        <div class="shadow-item" style="box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+          <div class="name">shadow-md</div>
+          <div class="usage">Cards</div>
+        </div>
+        <div class="shadow-item" style="box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+          <div class="name">shadow-lg</div>
+          <div class="usage">Dropdowns</div>
+        </div>
+        <div class="shadow-item" style="box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+          <div class="name">shadow-xl</div>
+          <div class="usage">Modals</div>
+        </div>
+        <div class="shadow-item" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+          <div class="name">shadow-2xl</div>
+          <div class="usage">Dialogs</div>
+        </div>
+      </div>
+
+      <h3>Elevation Shadows</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Token</th><th>Usage</th><th>Preview</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>elevation-1</td><td>Cards, Buttons</td><td><div style="width: 40px; height: 20px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);"></div></td></tr>
+          <tr><td>elevation-2</td><td>Elevated cards</td><td><div style="width: 40px; height: 20px; background: white; box-shadow: 0 3px 6px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.12);"></div></td></tr>
+          <tr><td>elevation-3</td><td>Dropdowns</td><td><div style="width: 40px; height: 20px; background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.15), 0 3px 6px rgba(0,0,0,0.10);"></div></td></tr>
+          <tr><td>elevation-4</td><td>Modals</td><td><div style="width: 40px; height: 20px; background: white; box-shadow: 0 15px 25px rgba(0,0,0,0.15), 0 5px 10px rgba(0,0,0,0.05);"></div></td></tr>
+          <tr><td>elevation-5</td><td>Dialogs</td><td><div style="width: 40px; height: 20px; background: white; box-shadow: 0 20px 40px rgba(0,0,0,0.2);"></div></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 14. Border Radius -->
+    <section class="no-break">
+      <h2>14. Border Radius</h2>
+      <p class="desc">Consistent rounding system for UI elements.</p>
+
+      <div class="radius-grid">
+        <div class="radius-item">
+          <div class="radius-preview" style="border-radius: 0;"></div>
+          <div class="radius-name">none</div>
+          <div class="radius-value">0</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-preview" style="border-radius: 4px;"></div>
+          <div class="radius-name">sm</div>
+          <div class="radius-value">4px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-preview" style="border-radius: 6px;"></div>
+          <div class="radius-name">md</div>
+          <div class="radius-value">6px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-preview" style="border-radius: 8px;"></div>
+          <div class="radius-name">DEFAULT</div>
+          <div class="radius-value">8px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-preview" style="border-radius: 12px;"></div>
+          <div class="radius-name">lg</div>
+          <div class="radius-value">12px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-preview" style="border-radius: 16px;"></div>
+          <div class="radius-name">xl</div>
+          <div class="radius-value">16px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-preview" style="border-radius: 24px;"></div>
+          <div class="radius-name">3xl</div>
+          <div class="radius-value">24px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-preview" style="border-radius: 50%;"></div>
+          <div class="radius-name">full</div>
+          <div class="radius-value">9999px</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15. Z-Index Scale -->
+    <section class="no-break">
+      <h2>15. Z-Index Scale</h2>
+      <p class="desc">Consistent layering system for UI elements.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>z-0</td><td>0</td><td>Default layer</td></tr>
+          <tr><td>z-10</td><td>10</td><td>Slightly elevated</td></tr>
+          <tr><td>z-20</td><td>20</td><td>Minor overlays</td></tr>
+          <tr><td>z-30</td><td>30</td><td>Medium overlays</td></tr>
+          <tr><td>z-40</td><td>40</td><td>Major overlays</td></tr>
+          <tr><td>z-50</td><td>50</td><td>Top-level content</td></tr>
+          <tr><td>z-dropdown</td><td>1000</td><td>Dropdown menus</td></tr>
+          <tr><td>z-sticky</td><td>1100</td><td>Sticky headers</td></tr>
+          <tr><td>z-fixed</td><td>1200</td><td>Fixed elements</td></tr>
+          <tr><td>z-modal</td><td>1300</td><td>Modal dialogs</td></tr>
+          <tr><td>z-popover</td><td>1400</td><td>Popovers</td></tr>
+          <tr><td>z-tooltip</td><td>1500</td><td>Tooltips (highest)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Page Break -->
+    <div class="page-break"></div>
+
+    <!-- 16. Transitions & Animations -->
+    <section>
+      <h2>16. Transitions & Animations</h2>
+      <p class="desc">Material motion curves and pre-built animation utilities.</p>
+
+      <div class="two-col">
+        <div class="no-break">
+          <h3>Duration Scale</h3>
+          <table class="data-table">
+            <thead>
+              <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>duration-fast</td><td>150ms</td><td>Quick interactions</td></tr>
+              <tr><td>duration-base</td><td>200ms</td><td>Standard transitions</td></tr>
+              <tr><td>duration-slow</td><td>300ms</td><td>Complex animations</td></tr>
+              <tr><td>duration-slower</td><td>500ms</td><td>Page transitions</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="no-break">
+          <h3>Timing Functions</h3>
+          <table class="data-table">
+            <thead>
+              <tr><th>Token</th><th>Curve</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>timing-standard</td><td>cubic-bezier(0.4, 0, 0.2, 1)</td></tr>
+              <tr><td>timing-decelerate</td><td>cubic-bezier(0, 0, 0.2, 1)</td></tr>
+              <tr><td>timing-accelerate</td><td>cubic-bezier(0.4, 0, 1, 1)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>Animation Presets</h3>
+      <div class="animation-grid">
+        <div class="animation-item">
+          <div class="animation-name">fade-in</div>
+          <div class="animation-value">0.2s ease-out</div>
+        </div>
+        <div class="animation-item">
+          <div class="animation-name">fade-out</div>
+          <div class="animation-value">0.2s ease-out</div>
+        </div>
+        <div class="animation-item">
+          <div class="animation-name">slide-in-up</div>
+          <div class="animation-value">0.2s ease-out</div>
+        </div>
+        <div class="animation-item">
+          <div class="animation-name">slide-in-down</div>
+          <div class="animation-value">0.2s ease-out</div>
+        </div>
+        <div class="animation-item">
+          <div class="animation-name">slide-in-right</div>
+          <div class="animation-value">0.3s ease</div>
+        </div>
+        <div class="animation-item">
+          <div class="animation-name">slide-in-left</div>
+          <div class="animation-value">0.3s ease</div>
+        </div>
+        <div class="animation-item">
+          <div class="animation-name">scale-in</div>
+          <div class="animation-value">0.2s ease-out</div>
+        </div>
+        <div class="animation-item">
+          <div class="animation-name">scale-out</div>
+          <div class="animation-value">0.2s ease-out</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gradients -->
+    <section class="no-break">
+      <h2>17. Gradients</h2>
+      <p class="desc">Pre-configured gradient utilities for brand elements.</p>
+
+      <div class="gradient-grid">
+        <div class="gradient-item">
+          <div class="gradient-preview" style="background: linear-gradient(135deg, #5153f6, #ec86fa);"></div>
+          <div class="gradient-info">
+            <div class="gradient-name">gradient-primary</div>
+            <div class="gradient-usage">Brand elements, CTAs</div>
+          </div>
+        </div>
+        <div class="gradient-item">
+          <div class="gradient-preview" style="background: linear-gradient(to top, rgba(81, 83, 246, 0.3), rgba(236, 134, 250, 0.4));"></div>
+          <div class="gradient-info">
+            <div class="gradient-name">gradient-accent</div>
+            <div class="gradient-usage">Overlays, highlights</div>
+          </div>
+        </div>
+        <div class="gradient-item">
+          <div class="gradient-preview" style="background: linear-gradient(to right, #ec86fa, #5153f6);"></div>
+          <div class="gradient-info">
+            <div class="gradient-name">gradient-chat-right</div>
+            <div class="gradient-usage">User messages</div>
+          </div>
+        </div>
+        <div class="gradient-item">
+          <div class="gradient-preview" style="background: linear-gradient(to left, #ec86fa, #5153f6);"></div>
+          <div class="gradient-info">
+            <div class="gradient-name">gradient-chat-left</div>
+            <div class="gradient-usage">AI messages</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p><strong>IntelliOps Design System</strong> | Version 1.0 | March 2026</p>
+      <p style="margin-top: 8px;">Font: Universal Sans | Framework: Tailwind CSS</p>
+    </footer>
+  </div>
+</body>
+</html>
