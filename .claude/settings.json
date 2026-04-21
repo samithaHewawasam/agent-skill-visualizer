@@ -1,0 +1,33 @@
+{
+  "model": "sonnet",
+  "hooks": {
+    "onToolCall": {
+      "bash": {
+        "enabled": false,
+        "command": ""
+      },
+      "edit": {
+        "enabled": false,
+        "command": ""
+      },
+      "write": {
+        "enabled": false,
+        "command": ""
+      }
+    }
+  },
+  "ignorePatterns": [
+    "node_modules/**",
+    ".git/**",
+    "dist/**",
+    "build/**",
+    "*.log",
+    ".env",
+    ".env.local"
+  ],
+  "autoApprove": {
+    "bash": false,
+    "edit": false,
+    "write": false
+  }
+}

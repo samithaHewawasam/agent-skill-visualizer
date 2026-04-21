@@ -1377,7 +1377,7 @@ Add a dark mode toggle to the settings page
     `
   },
 
-  // Slide 5: What Are Agent Skills?
+  // Slide 4: What Are Agent Skills?
   {
     title: 'What Are Agent Skills?',
     subtitle: 'The foundation of intelligent prompt augmentation',
@@ -1414,7 +1414,7 @@ Add a dark mode toggle to the settings page
     `
   },
 
-  // Slide 6: Problems We're Solving
+  // Slide 5: Problems We're Solving
   {
     title: 'Problems We\'re Solving',
     subtitle: 'Why traditional approaches fall short — Click each card to explore',
@@ -1765,7 +1765,85 @@ Define props interfaces...
     `
   },
 
-  // Slide 9: Skills Are Not Limited to Code
+  // Slide 9: Example: A Real Skill
+  {
+    title: 'Example: A Real Skill',
+    subtitle: 'IntelliOps Design System Skill',
+    content: `
+      <div class="card" style="max-height: 70vh; overflow-y: auto;">
+        <div class="card-header">SKILL.md</div>
+        <div class="card-title">.claude/skills/design-system/SKILL.md</div>
+
+        <div style="background: rgba(0,0,0,0.05); border-radius: 8px; padding: 16px; margin: 16px 0; font-family: 'Monaco', 'Courier New', monospace; font-size: 13px; line-height: 1.6;">
+          <div style="color: #666; margin-bottom: 12px;">--- <span style="color: #999;">frontmatter</span></div>
+          <div style="margin-left: 16px;">
+            <div><span style="color: #0066cc; font-weight: 600;">name:</span> <span style="color: #006600;">design-system</span></div>
+            <div><span style="color: #0066cc; font-weight: 600;">description:</span> <span style="color: #006600;">Complete design system including elevation, borders, text colors, semantic colors, shadows, spacing conventions, and Tailwind CSS classes. Use when styling any UI component.</span></div>
+            <div><span style="color: #0066cc; font-weight: 600;">when_to_use:</span> <span style="color: #006600;">Reference when applying colors, spacing, borders, shadows, or any styling to components. Use for understanding elevation system, text hierarchy, semantic color usage, or spacing patterns.</span></div>
+            <div><span style="color: #0066cc; font-weight: 600;">user-invocable:</span> <span style="color: #cc0000;">false</span></div>
+            <div><span style="color: #0066cc; font-weight: 600;">paths:</span> <span style="color: #006600;">"**/*.tsx,**/*.ts,**/*.css"</span></div>
+          </div>
+          <div style="color: #666; margin-top: 12px;">---</div>
+
+          <div style="margin-top: 20px; color: #333;">
+            <div style="font-size: 18px; font-weight: bold; color: #000; margin-bottom: 8px;"># Design System - IntelliOps</div>
+            <div style="margin-top: 16px;">This document covers all design tokens, colors, spacing, and styling conventions used throughout the IntelliOps application.</div>
+
+            <div style="margin-top: 24px; font-size: 16px; font-weight: bold; color: #000;">## Elevation System</div>
+            <div style="margin-top: 8px;">The elevation system creates visual hierarchy through background colors. Use these instead of arbitrary gray values.</div>
+
+            <div style="margin-top: 12px; background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; border-left: 3px solid #0066cc;">
+              <div style="font-family: monospace; font-size: 12px;">
+                <div style="color: #666;">/* Background Colors (Elevation) */</div>
+                <div><span style="color: #cc6600;">bg-elevation-0</span>  <span style="color: #999;">/* Base canvas background - Page background */</span></div>
+                <div><span style="color: #cc6600;">bg-elevation-1</span>  <span style="color: #999;">/* Raised surface - Cards, sidebar */</span></div>
+                <div><span style="color: #cc6600;">bg-elevation-2</span>  <span style="color: #999;">/* Higher surface - Panels, modals, headers */</span></div>
+                <div><span style="color: #cc6600;">bg-elevation-3</span>  <span style="color: #999;">/* Highest surface - Dropdowns, tooltips, popovers */</span></div>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; font-size: 16px; font-weight: bold; color: #000;">## Text Colors</div>
+            <div style="margin-top: 8px;">Hierarchy for text content.</div>
+
+            <div style="margin-top: 12px; background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; border-left: 3px solid #0066cc;">
+              <div style="font-family: monospace; font-size: 12px;">
+                <div><span style="color: #cc6600;">text-foreground</span>       <span style="color: #999;">/* Primary text */</span></div>
+                <div><span style="color: #cc6600;">text-text-primary</span>     <span style="color: #999;">/* Primary text */</span></div>
+                <div><span style="color: #cc6600;">text-text-secondary</span>   <span style="color: #999;">/* Secondary/muted text */</span></div>
+                <div><span style="color: #cc6600;">text-text-tertiary</span>    <span style="color: #999;">/* Tertiary/hint text */</span></div>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; font-size: 16px; font-weight: bold; color: #000;">## Semantic Colors</div>
+            <div style="margin-top: 8px;">Use semantic colors for status, actions, and feedback.</div>
+
+            <div style="margin-top: 12px; background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; border-left: 3px solid #0066cc;">
+              <div style="font-family: monospace; font-size: 12px;">
+                <div><span style="color: #cc6600;">bg-primary</span>, <span style="color: #cc6600;">text-primary</span>, <span style="color: #cc6600;">border-primary</span></div>
+                <div><span style="color: #cc6600;">bg-success</span>, <span style="color: #cc6600;">text-success</span>, <span style="color: #cc6600;">border-success</span></div>
+                <div><span style="color: #cc6600;">bg-warning</span>, <span style="color: #cc6600;">text-warning</span>, <span style="color: #cc6600;">border-warning</span></div>
+                <div><span style="color: #cc6600;">bg-error</span>, <span style="color: #cc6600;">text-error</span>, <span style="color: #cc6600;">border-error</span></div>
+                <div><span style="color: #cc6600;">bg-info</span>, <span style="color: #cc6600;">text-info</span>, <span style="color: #cc6600;">border-info</span></div>
+              </div>
+            </div>
+
+            <div style="margin-top: 20px; padding: 12px; background: rgba(255,193,7,0.1); border-left: 3px solid #ffc107; border-radius: 4px; font-size: 12px;">
+              <strong>📄 Full skill file:</strong> 933 lines covering elevation, borders, shadows, spacing, buttons, badges, forms, icons, layouts, and more...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top: 16px;">
+        <div class="highlight-title">💡 Why This Works</div>
+        <div class="highlight-content">
+          When you're building a UI component, the agent automatically loads this skill based on the file type (*.tsx). Instead of manually copying design tokens or guessing class names, the complete design system is injected into the context—ensuring consistent styling across the entire application.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 10: Skills Are Not Limited to Code
   {
     title: 'Skills Are Not Limited to Code',
     subtitle: 'Any structured knowledge can be a skill',

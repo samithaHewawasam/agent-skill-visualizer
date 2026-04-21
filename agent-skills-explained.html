@@ -1290,189 +1290,7 @@ function validateEmail(email: string): ValidationResult { ... }
     `
   },
 
-  // Slide 3: Who Adds Each Type of Prompt?
-  {
-    title: 'Who Adds Each Type of Prompt?',
-    subtitle: 'Understanding the roles in AI conversations',
-    content: `
-      <div class="card">
-        <div class="card-header">The Four Key Players</div>
-        <div class="card-title">Every AI conversation involves different actors</div>
-        <div class="card-content">
-          Understanding who provides each type of prompt is crucial for building AI systems. Each actor has a specific role in shaping the conversation and the quality of responses.
-        </div>
-      </div>
-
-      <div class="highlight-box">
-        <div class="highlight-title">💬 Live Conversation Example</div>
-        <div class="highlight-content">Watch how each actor contributes to the conversation flow</div>
-      </div>
-
-      <div class="conversation-demo">
-        <div class="message system">
-          <div class="message-avatar">⚙️</div>
-          <div class="message-content">
-            <div class="message-label">System Prompt (Developer)</div>
-            <div class="message-text">You are a helpful coding assistant. Always write clean, well-documented code following best practices.</div>
-          </div>
-        </div>
-
-        <div class="message user">
-          <div class="message-avatar">👤</div>
-          <div class="message-content">
-            <div class="message-label">User Prompt (End User)</div>
-            <div class="message-text">Create a function to validate email addresses</div>
-          </div>
-        </div>
-
-        <div class="message assistant">
-          <div class="message-avatar">🤖</div>
-          <div class="message-content">
-            <div class="message-label">Assistant Response (AI)</div>
-            <div class="message-text">Here's a robust email validation function using regex:<br><br>
-function validateEmail(email) {<br>
-&nbsp;&nbsp;const regex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;<br>
-&nbsp;&nbsp;return regex.test(email);<br>
-}</div>
-          </div>
-        </div>
-
-        <div class="message user">
-          <div class="message-avatar">👤</div>
-          <div class="message-content">
-            <div class="message-label">User Prompt (End User)</div>
-            <div class="message-text">Add error messages for different validation failures</div>
-          </div>
-        </div>
-      </div>
-    `
-  },
-
-  // Slide 4: What is Prompt Augmentation?
-  {
-    title: 'What is Prompt Augmentation?',
-    subtitle: 'Enriching prompts with contextual knowledge',
-    content: `
-      <div class="card">
-        <div class="card-header">Core Concept</div>
-        <div class="card-title">Augmentation = Original Prompt + Selected Skills</div>
-        <div class="card-content">
-          Prompt augmentation is the process of combining the user's original prompt with relevant documentation from selected skills. Instead of sending just the user's question, we send an enriched prompt that includes all the context needed for a high-quality response.
-        </div>
-      </div>
-
-      <div class="flow">
-        <div class="flow-step">
-          <div class="flow-number">📝</div>
-          <div class="flow-content">
-            <div class="flow-label">Original User Prompt</div>
-            <div class="flow-desc">"Add a dark mode toggle to the settings page"</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">🎯</div>
-          <div class="flow-content">
-            <div class="flow-label">Skills Selected</div>
-            <div class="flow-desc">design-system, theme-config, react-components</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">📚</div>
-          <div class="flow-content">
-            <div class="flow-label">Skills Loaded</div>
-            <div class="flow-desc">Full documentation content for the 3 selected skills (~8KB)</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">✨</div>
-          <div class="flow-content">
-            <div class="flow-label">Augmented Prompt Created</div>
-            <div class="flow-desc">Original prompt + skill documentation combined into one enriched context</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="code-block" data-label="AUGMENTED PROMPT STRUCTURE">
-<pre>===== AUGMENTED PROMPT SENT TO LLM =====
-
-[SKILL: Design System]
-Your app uses a ThemeProvider from styled-components.
-Colors are defined in src/theme/colors.ts...
-All components should use theme.colors.primary...
-
-[SKILL: Theme Configuration]
-Themes: 'light' and 'dark' are available.
-Toggle using setTheme() from useTheme() hook...
-Store preference in localStorage('theme-mode')...
-
-[SKILL: React Components]
-All UI components are in src/components/...
-Buttons use the Button component with variant prop...
-Toggle switches use Switch component...
-
-[USER REQUEST]
-Add a dark mode toggle to the settings page
-
-===== END AUGMENTED PROMPT =====
-</pre>
-      </div>
-
-      <div class="highlight-box">
-        <div class="highlight-title">🎯 Why Augmentation Works</div>
-        <div class="highlight-content">
-          Without augmentation, the LLM would generate <strong>generic dark mode code</strong> that doesn't match your patterns. With augmentation, it knows your exact theme system, component library, and conventions — resulting in code that's <strong>ready to merge</strong>.
-        </div>
-      </div>
-    `
-  },
-
-  // Slide 5: What Are Agent Skills?
-  {
-    title: 'What Are Agent Skills?',
-    subtitle: 'The foundation of intelligent prompt augmentation',
-    content: `
-      <div class="card">
-        <div class="card-header">Core Concept</div>
-        <div class="card-title">Skills = Modular Knowledge Bundles</div>
-        <div class="card-content">
-          Agent skills are discrete, self-contained packages of documentation, patterns, and context that can be dynamically injected into an LLM's prompt. Instead of loading every piece of knowledge upfront, skills enable selective, intelligent context loading based on what the user is actually trying to do.
-        </div>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number">∞</div>
-          <div class="stat-label">Scalable Knowledge</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">⚡</div>
-          <div class="stat-label">Dynamic Loading</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">🎯</div>
-          <div class="stat-label">Context Aware</div>
-        </div>
-      </div>
-
-      <div class="highlight-box">
-        <div class="highlight-title">💡 Key Insight</div>
-        <div class="highlight-content">
-          Skills solve the fundamental limitation of LLMs: <strong>context window size</strong>. You can't load your entire codebase, all documentation, and every pattern into the prompt. Skills let you load exactly what's needed, when it's needed.
-        </div>
-      </div>
-    `
-  },
-
-  // Slide 6: Problems We're Solving
+  // Slide 3: Problems We're Solving
   {
     title: 'Problems We\'re Solving',
     subtitle: 'Why traditional approaches fall short — Click each card to explore',
@@ -1679,295 +1497,131 @@ import { Switch } from
     `
   },
 
-  // Slide 7: What is Frontmatter?
+  // Slide 4: What is Prompt Augmentation?
   {
-    title: 'What is Frontmatter?',
-    subtitle: 'Metadata for efficient skill discovery',
+    title: 'What is Prompt Augmentation?',
+    subtitle: 'Enriching prompts with contextual knowledge',
     content: `
       <div class="card">
-        <div class="card-header">Definition</div>
-        <div class="card-title">Frontmatter = Skill Index</div>
+        <div class="card-header">Core Concept</div>
+        <div class="card-title">Augmentation = Original Prompt + Selected Skills</div>
         <div class="card-content">
-          Frontmatter is a YAML block at the top of each SKILL.md file containing metadata like name, description, tags, and version. The selection model reads ONLY frontmatter (first ~600 bytes) — never the full content — to decide which skills are relevant.
+          Prompt augmentation is the process of combining the user's original prompt with relevant documentation from selected skills. Instead of sending just the user's question, we send an enriched prompt that includes all the context needed for a high-quality response.
         </div>
-      </div>
-
-      <div class="code-block" data-label="SKILL.md STRUCTURE">
-<pre>---
-name: "React Components"
-description: "Patterns for building React components with TypeScript"
-tags: [react, typescript, components]
-version: "2.1.0"
----
-
-# React Component Patterns
-
-## Functional Components
-Always use function declarations...
-
-## Props and TypeScript
-Define props interfaces...
-
-(... 5000 more lines of documentation ...)
-</pre>
-      </div>
-
-      <div class="highlight-box">
-        <div class="highlight-title">⚡ Performance Optimization</div>
-        <div class="highlight-content">
-          By indexing only frontmatter, the system can scan <strong>100+ skills</strong> in under 100ms. Full content is loaded lazily AFTER selection. This scales to massive skill libraries without performance degradation.
-        </div>
-      </div>
-
-      <div class="feature-list">
-        <div class="feature-item">
-          <div class="feature-icon">📋</div>
-          <div class="feature-title">Name</div>
-          <div class="feature-desc">Human-readable skill identifier</div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">📝</div>
-          <div class="feature-title">Description</div>
-          <div class="feature-desc">Short summary for selection matching</div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">🏷️</div>
-          <div class="feature-title">Tags</div>
-          <div class="feature-desc">Categories for filtering and search</div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">🔢</div>
-          <div class="feature-title">Version</div>
-          <div class="feature-desc">Track updates and changes</div>
-        </div>
-      </div>
-    `
-  },
-
-  // Slide 8: How to Configure Skills
-  {
-    title: 'How to Configure Skills',
-    subtitle: 'File-based architecture for easy management',
-    content: `
-      <div class="card">
-        <div class="card-header">Directory Structure</div>
-        <div class="card-title">Skills Live in a Single Folder</div>
-        <div class="card-content">
-          Each skill is a subdirectory containing a SKILL.md file. The system scans this folder on startup to build the skill index. No database, no config files — just markdown on disk.
-        </div>
-      </div>
-
-      <div class="code-block" data-label="DIRECTORY LAYOUT">
-<pre>skills/
-├── react-components/
-│   └── SKILL.md            ← Frontmatter + full docs
-├── api-integration/
-│   └── SKILL.md
-├── state-management/
-│   └── SKILL.md
-├── authentication/
-│   └── SKILL.md
-├── design-system/
-│   └── SKILL.md
-└── testing-patterns/
-    └── SKILL.md
-</pre>
       </div>
 
       <div class="flow">
         <div class="flow-step">
-          <div class="flow-number">1</div>
+          <div class="flow-number">📝</div>
           <div class="flow-content">
-            <div class="flow-label">Create a Directory</div>
-            <div class="flow-desc">mkdir skills/my-new-skill</div>
+            <div class="flow-label">Original User Prompt</div>
+            <div class="flow-desc">"Add a dark mode toggle to the settings page"</div>
           </div>
         </div>
 
         <div class="flow-arrow">↓</div>
 
         <div class="flow-step">
-          <div class="flow-number">2</div>
+          <div class="flow-number">🎯</div>
           <div class="flow-content">
-            <div class="flow-label">Write SKILL.md</div>
-            <div class="flow-desc">Add frontmatter (name, description) + documentation content</div>
+            <div class="flow-label">Skills Selected</div>
+            <div class="flow-desc">design-system, theme-config, react-components</div>
           </div>
         </div>
 
         <div class="flow-arrow">↓</div>
 
-        <div class="flow-step">
-          <div class="flow-number">3</div>
-          <div class="flow-content">
-            <div class="flow-label">Restart Server (or hot-reload)</div>
-            <div class="flow-desc">Server scans skills/ folder and rebuilds index</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">4</div>
-          <div class="flow-content">
-            <div class="flow-label">Skill is Now Available</div>
-            <div class="flow-desc">Selection model can now choose this skill for relevant prompts</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="highlight-box">
-        <div class="highlight-title">🔥 Hot Reloading</div>
-        <div class="highlight-content">
-          In development, watch the skills/ folder for changes and rebuild the index automatically. Update documentation without restarting your app.
-        </div>
-      </div>
-    `
-  },
-
-  // Slide 9: Skills Are Not Limited to Code
-  {
-    title: 'Skills Are Not Limited to Code',
-    subtitle: 'Any structured knowledge can be a skill',
-    content: `
-      <div class="feature-list">
-        <div class="feature-item">
-          <div class="feature-icon">💻</div>
-          <div class="feature-title">Code Patterns</div>
-          <div class="feature-desc">Component templates, API clients, hooks, utilities</div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">🎨</div>
-          <div class="feature-title">Design Systems</div>
-          <div class="feature-desc">Colors, typography, spacing rules, component library</div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">📐</div>
-          <div class="feature-title">Architecture Patterns</div>
-          <div class="feature-desc">Folder structure, naming conventions, module boundaries</div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">🔧</div>
-          <div class="feature-title">Tool Configurations</div>
-          <div class="feature-desc">ESLint rules, CI/CD pipelines, deployment scripts</div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">📊</div>
-          <div class="feature-title">Data Models</div>
-          <div class="feature-desc">Database schemas, API contracts, validation rules</div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">🧪</div>
-          <div class="feature-title">Testing Strategies</div>
-          <div class="feature-desc">Unit test templates, E2E patterns, mocking conventions</div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">🌐</div>
-          <div class="feature-title">API Documentation</div>
-          <div class="feature-desc">Endpoint definitions, auth flows, rate limits</div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">📋</div>
-          <div class="feature-title">Business Logic</div>
-          <div class="feature-desc">Domain rules, workflow definitions, compliance requirements</div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">🗂️</div>
-          <div class="feature-title">Project Context</div>
-          <div class="feature-desc">Team conventions, PR templates, code review guidelines</div>
-        </div>
-      </div>
-
-      <div class="highlight-box">
-        <div class="highlight-title">💡 Real-World Example</div>
-        <div class="highlight-content">
-          A "deployment-pipeline" skill might contain: AWS configuration patterns, Docker compose templates, staging vs production environment variables, rollback procedures, and incident response playbooks. When a developer asks "How do I deploy to staging?", all this context gets injected.
-        </div>
-      </div>
-    `
-  },
-
-  // Slide 10: Does the Agent Read Everything?
-  {
-    title: 'Does the Agent Read Everything?',
-    subtitle: 'No — lazy loading is the secret sauce',
-    content: `
-      <div class="card">
-        <div class="card-header">The Answer</div>
-        <div class="card-title">No, the Agent Never Reads Full Content Before Selection</div>
-        <div class="card-content">
-          The selection model only reads frontmatter (first ~600 bytes). Full skill content is loaded lazily AFTER selection. This is critical for scalability — you could have 1,000 skills totaling 50MB, but selection still completes in milliseconds.
-        </div>
-      </div>
-
-      <div class="flow">
         <div class="flow-step">
           <div class="flow-number">📚</div>
           <div class="flow-content">
-            <div class="flow-label">Startup: Build Skill Index</div>
-            <div class="flow-desc">Server reads ONLY frontmatter from each SKILL.md (first 600 bytes)</div>
+            <div class="flow-label">Skills Loaded</div>
+            <div class="flow-desc">Full documentation content for the 3 selected skills (~8KB)</div>
           </div>
         </div>
 
         <div class="flow-arrow">↓</div>
 
         <div class="flow-step">
-          <div class="flow-number">🔍</div>
+          <div class="flow-number">✨</div>
           <div class="flow-content">
-            <div class="flow-label">Selection Phase</div>
-            <div class="flow-desc">Model receives: user prompt + skill index (name + description only)</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">✅</div>
-          <div class="flow-content">
-            <div class="flow-label">3 Skills Selected</div>
-            <div class="flow-desc">react-components (0.92), state-management (0.85), design-system (0.88)</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">📖</div>
-          <div class="flow-content">
-            <div class="flow-label">Lazy Load ONLY Selected Skills</div>
-            <div class="flow-desc">Read full content of 3 skills from disk (~6KB total)</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">🚀</div>
-          <div class="flow-content">
-            <div class="flow-label">Augmented Prompt Sent to Generation Model</div>
-            <div class="flow-desc">Original prompt + 6KB of relevant documentation</div>
+            <div class="flow-label">Augmented Prompt Created</div>
+            <div class="flow-desc">Original prompt + skill documentation combined into one enriched context</div>
           </div>
         </div>
       </div>
 
+      <div class="code-block" data-label="AUGMENTED PROMPT STRUCTURE">
+<pre>===== AUGMENTED PROMPT SENT TO LLM =====
+
+[SKILL: Design System]
+Your app uses a ThemeProvider from styled-components.
+Colors are defined in src/theme/colors.ts...
+All components should use theme.colors.primary...
+
+[SKILL: Theme Configuration]
+Themes: 'light' and 'dark' are available.
+Toggle using setTheme() from useTheme() hook...
+Store preference in localStorage('theme-mode')...
+
+[SKILL: React Components]
+All UI components are in src/components/...
+Buttons use the Button component with variant prop...
+Toggle switches use Switch component...
+
+[USER REQUEST]
+Add a dark mode toggle to the settings page
+
+===== END AUGMENTED PROMPT =====
+</pre>
+      </div>
+
       <div class="highlight-box">
-        <div class="highlight-title">⚡ Performance Benefits</div>
+        <div class="highlight-title">🎯 Why Augmentation Works</div>
         <div class="highlight-content">
-          <strong>Without lazy loading:</strong> Selection model would receive 50MB of skill content (timeout, high cost)<br>
-          <strong>With lazy loading:</strong> Selection receives ~20KB frontmatter, generation receives ~6KB selected content<br>
-          <strong>Result:</strong> 99.99% reduction in tokens processed during selection
+          Without augmentation, the LLM would generate <strong>generic dark mode code</strong> that doesn't match your patterns. With augmentation, it knows your exact theme system, component library, and conventions — resulting in code that's <strong>ready to merge</strong>.
         </div>
       </div>
     `
   },
 
-  // Slide 11: How It Works: Two-Step Pipeline
+  // Slide 5: What Are Agent Skills?
+  {
+    title: 'What Are Agent Skills?',
+    subtitle: 'The foundation of intelligent prompt augmentation',
+    content: `
+      <div class="card">
+        <div class="card-header">Core Concept</div>
+        <div class="card-title">Skills = Modular Knowledge Bundles</div>
+        <div class="card-content">
+          Agent skills are discrete, self-contained packages of documentation, patterns, and context that can be dynamically injected into an LLM's prompt. Instead of loading every piece of knowledge upfront, skills enable selective, intelligent context loading based on what the user is actually trying to do.
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Scalable Knowledge</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">⚡</div>
+          <div class="stat-label">Dynamic Loading</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">🎯</div>
+          <div class="stat-label">Context Aware</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">💡 Key Insight</div>
+        <div class="highlight-content">
+          Skills solve the fundamental limitation of LLMs: <strong>context window size</strong>. You can't load your entire codebase, all documentation, and every pattern into the prompt. Skills let you load exactly what's needed, when it's needed.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 6: How It Works: Two-Step Pipeline
   {
     title: 'How It Works: Two-Step Pipeline',
     subtitle: 'Skill selection → Prompt augmentation → Response generation',
@@ -2046,7 +1700,81 @@ Augmented prompt sent to generation model:
     `
   },
 
-  // Slide 12: Why Use Two Different Models?
+  // Slide 7: Does the Agent Read Everything?
+  {
+    title: 'Does the Agent Read Everything?',
+    subtitle: 'No — lazy loading is the secret sauce',
+    content: `
+      <div class="card">
+        <div class="card-header">The Answer</div>
+        <div class="card-title">No, the Agent Never Reads Full Content Before Selection</div>
+        <div class="card-content">
+          The selection model only reads frontmatter (first ~600 bytes). Full skill content is loaded lazily AFTER selection. This is critical for scalability — you could have 1,000 skills totaling 50MB, but selection still completes in milliseconds.
+        </div>
+      </div>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">📚</div>
+          <div class="flow-content">
+            <div class="flow-label">Startup: Build Skill Index</div>
+            <div class="flow-desc">Server reads ONLY frontmatter from each SKILL.md (first 600 bytes)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">🔍</div>
+          <div class="flow-content">
+            <div class="flow-label">Selection Phase</div>
+            <div class="flow-desc">Model receives: user prompt + skill index (name + description only)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">✅</div>
+          <div class="flow-content">
+            <div class="flow-label">3 Skills Selected</div>
+            <div class="flow-desc">react-components (0.92), state-management (0.85), design-system (0.88)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">📖</div>
+          <div class="flow-content">
+            <div class="flow-label">Lazy Load ONLY Selected Skills</div>
+            <div class="flow-desc">Read full content of 3 skills from disk (~6KB total)</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">🚀</div>
+          <div class="flow-content">
+            <div class="flow-label">Augmented Prompt Sent to Generation Model</div>
+            <div class="flow-desc">Original prompt + 6KB of relevant documentation</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">⚡ Performance Benefits</div>
+        <div class="highlight-content">
+          <strong>Without lazy loading:</strong> Selection model would receive 50MB of skill content (timeout, high cost)<br>
+          <strong>With lazy loading:</strong> Selection receives ~20KB frontmatter, generation receives ~6KB selected content<br>
+          <strong>Result:</strong> 99.99% reduction in tokens processed during selection
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 8: Why Use Two Different Models?
   {
     title: 'Why Use Two Different Models?',
     subtitle: 'Cost optimization meets quality',
@@ -2096,7 +1824,221 @@ Augmented prompt sent to generation model:
     `
   },
 
-  // Slide 13: Skill Distribution Methods
+  // Slide 9: What is Frontmatter?
+  {
+    title: 'What is Frontmatter?',
+    subtitle: 'Metadata for efficient skill discovery',
+    content: `
+      <div class="card">
+        <div class="card-header">Definition</div>
+        <div class="card-title">Frontmatter = Skill Index</div>
+        <div class="card-content">
+          Frontmatter is a YAML block at the top of each SKILL.md file containing metadata like name, description, tags, and version. The selection model reads ONLY frontmatter (first ~600 bytes) — never the full content — to decide which skills are relevant.
+        </div>
+      </div>
+
+      <div class="code-block" data-label="SKILL.md STRUCTURE">
+<pre>---
+name: "React Components"
+description: "Patterns for building React components with TypeScript"
+tags: [react, typescript, components]
+version: "2.1.0"
+---
+
+# React Component Patterns
+
+## Functional Components
+Always use function declarations...
+
+## Props and TypeScript
+Define props interfaces...
+
+(... 5000 more lines of documentation ...)
+</pre>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">⚡ Performance Optimization</div>
+        <div class="highlight-content">
+          By indexing only frontmatter, the system can scan <strong>100+ skills</strong> in under 100ms. Full content is loaded lazily AFTER selection. This scales to massive skill libraries without performance degradation.
+        </div>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Name</div>
+          <div class="feature-desc">Human-readable skill identifier</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📝</div>
+          <div class="feature-title">Description</div>
+          <div class="feature-desc">Short summary for selection matching</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🏷️</div>
+          <div class="feature-title">Tags</div>
+          <div class="feature-desc">Categories for filtering and search</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔢</div>
+          <div class="feature-title">Version</div>
+          <div class="feature-desc">Track updates and changes</div>
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 10: How to Configure Skills
+  {
+    title: 'How to Configure Skills',
+    subtitle: 'File-based architecture for easy management',
+    content: `
+      <div class="card">
+        <div class="card-header">Directory Structure</div>
+        <div class="card-title">Skills Live in a Single Folder</div>
+        <div class="card-content">
+          Each skill is a subdirectory containing a SKILL.md file. The system scans this folder on startup to build the skill index. No database, no config files — just markdown on disk.
+        </div>
+      </div>
+
+      <div class="code-block" data-label="DIRECTORY LAYOUT">
+<pre>skills/
+├── react-components/
+│   └── SKILL.md            ← Frontmatter + full docs
+├── api-integration/
+│   └── SKILL.md
+├── state-management/
+│   └── SKILL.md
+├── authentication/
+│   └── SKILL.md
+├── design-system/
+│   └── SKILL.md
+└── testing-patterns/
+    └── SKILL.md
+</pre>
+      </div>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">1</div>
+          <div class="flow-content">
+            <div class="flow-label">Create a Directory</div>
+            <div class="flow-desc">mkdir skills/my-new-skill</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">2</div>
+          <div class="flow-content">
+            <div class="flow-label">Write SKILL.md</div>
+            <div class="flow-desc">Add frontmatter (name, description) + documentation content</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">3</div>
+          <div class="flow-content">
+            <div class="flow-label">Restart Server (or hot-reload)</div>
+            <div class="flow-desc">Server scans skills/ folder and rebuilds index</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">4</div>
+          <div class="flow-content">
+            <div class="flow-label">Skill is Now Available</div>
+            <div class="flow-desc">Selection model can now choose this skill for relevant prompts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">🔥 Hot Reloading</div>
+        <div class="highlight-content">
+          In development, watch the skills/ folder for changes and rebuild the index automatically. Update documentation without restarting your app.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 11: Skills Are Not Limited to Code
+  {
+    title: 'Skills Are Not Limited to Code',
+    subtitle: 'Any structured knowledge can be a skill',
+    content: `
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">💻</div>
+          <div class="feature-title">Code Patterns</div>
+          <div class="feature-desc">Component templates, API clients, hooks, utilities</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">Design Systems</div>
+          <div class="feature-desc">Colors, typography, spacing rules, component library</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📐</div>
+          <div class="feature-title">Architecture Patterns</div>
+          <div class="feature-desc">Folder structure, naming conventions, module boundaries</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🔧</div>
+          <div class="feature-title">Tool Configurations</div>
+          <div class="feature-desc">ESLint rules, CI/CD pipelines, deployment scripts</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Data Models</div>
+          <div class="feature-desc">Database schemas, API contracts, validation rules</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🧪</div>
+          <div class="feature-title">Testing Strategies</div>
+          <div class="feature-desc">Unit test templates, E2E patterns, mocking conventions</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-title">API Documentation</div>
+          <div class="feature-desc">Endpoint definitions, auth flows, rate limits</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Business Logic</div>
+          <div class="feature-desc">Domain rules, workflow definitions, compliance requirements</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🗂️</div>
+          <div class="feature-title">Project Context</div>
+          <div class="feature-desc">Team conventions, PR templates, code review guidelines</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">💡 Real-World Example</div>
+        <div class="highlight-content">
+          A "deployment-pipeline" skill might contain: AWS configuration patterns, Docker compose templates, staging vs production environment variables, rollback procedures, and incident response playbooks. When a developer asks "How do I deploy to staging?", all this context gets injected.
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 12: Skill Distribution Methods
   {
     title: 'Skill Distribution Methods',
     subtitle: 'Custom Skills vs Packaged Skills — Click each card to explore',
@@ -2496,7 +2438,7 @@ loadSkillFromPath(skillPath);
     `
   },
 
-  // Slide 14: The Claude Way
+  // Slide 13: The Claude Way
   {
     title: 'The Claude Way',
     subtitle: 'How Anthropic implements skills with Claude',
@@ -2562,7 +2504,7 @@ loadSkillFromPath(skillPath);
     `
   },
 
-  // Slide 15: The OpenAI Way
+  // Slide 14: The OpenAI Way
   {
     title: 'The OpenAI Way',
     subtitle: 'Interactive exploration of OpenAI Skills — Click each card to explore',
@@ -2860,7 +2802,7 @@ class DataProcessor:
     `
   },
 
-  // Slide 16: Claude vs OpenAI: Skill Implementation
+  // Slide 15: Claude vs OpenAI: Skill Implementation
   {
     title: 'Claude vs OpenAI: Skill Implementation',
     subtitle: 'Different philosophies for the same goal',
@@ -2937,7 +2879,7 @@ class DataProcessor:
     `
   },
 
-  // Slide 17: Final Response Generation
+  // Slide 16: Final Response Generation
   {
     title: 'Final Response Generation',
     subtitle: 'From augmented prompt to actionable output',
@@ -3018,7 +2960,7 @@ function SettingsPage() {
     `
   },
 
-  // Slide 18: Advanced Patterns
+  // Slide 17: Advanced Patterns
   {
     title: 'Advanced Patterns',
     subtitle: 'Taking skills to the next level',
@@ -3083,7 +3025,7 @@ a complete form implementation guide.
     `
   },
 
-  // Slide 19: Real-World Use Cases
+  // Slide 18: Real-World Use Cases
   {
     title: 'Real-World Use Cases',
     subtitle: 'Where skills shine in production',
@@ -3132,94 +3074,7 @@ a complete form implementation guide.
     `
   },
 
-  // Slide 20: Implementation Checklist
-  {
-    title: 'Implementation Checklist',
-    subtitle: 'How to build your own skill system',
-    content: `
-      <div class="flow">
-        <div class="flow-step">
-          <div class="flow-number">1</div>
-          <div class="flow-content">
-            <div class="flow-label">Define Skill Schema</div>
-            <div class="flow-desc">Decide frontmatter fields: name, description, tags, version, dependencies</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">2</div>
-          <div class="flow-content">
-            <div class="flow-label">Build Skill Indexer</div>
-            <div class="flow-desc">Scan skills/ folder on startup, parse frontmatter, build in-memory index</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">3</div>
-          <div class="flow-content">
-            <div class="flow-label">Implement Selection API</div>
-            <div class="flow-desc">Accept user prompt, send to selection model with skill index, return selected skills</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">4</div>
-          <div class="flow-content">
-            <div class="flow-label">Build Content Loader</div>
-            <div class="flow-desc">Read full content of selected skills from disk, strip frontmatter</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">5</div>
-          <div class="flow-content">
-            <div class="flow-label">Create Prompt Augmenter</div>
-            <div class="flow-desc">Combine original prompt + skill documentation into augmented prompt</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">6</div>
-          <div class="flow-content">
-            <div class="flow-label">Implement Generation API</div>
-            <div class="flow-desc">Send augmented prompt to generation model, return response</div>
-          </div>
-        </div>
-
-        <div class="flow-arrow">↓</div>
-
-        <div class="flow-step">
-          <div class="flow-number">7</div>
-          <div class="flow-content">
-            <div class="flow-label">Add Visualization</div>
-            <div class="flow-desc">Build UI to show selected skills, confidence scores, augmented prompt (like your React visualizer!)</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="highlight-box">
-        <div class="highlight-title">📦 Reference Implementation</div>
-        <div class="highlight-content">
-          Your <strong>agent-skill-visualizer</strong> project is a complete working example! Check out:<br>
-          • <code>backend/server.js</code> — Skill indexing + selection + augmentation<br>
-          • <code>src/App.tsx</code> — React visualization with real-time SSE updates<br>
-          • <code>backend/skills/</code> — Example skill structure
-        </div>
-      </div>
-    `
-  },
-
-  // Slide 21: Live Demo: Agent Skills Visualizer
+  // Slide 19: Live Demo: Agent Skills Visualizer
   {
     title: 'Live Demo: Agent Skills Visualizer',
     subtitle: 'See the entire pipeline in real-time',
@@ -3357,7 +3212,94 @@ a complete form implementation guide.
     `
   },
 
-  // Slide 22: Key Takeaways
+  // Slide 20: Implementation Checklist
+  {
+    title: 'Implementation Checklist',
+    subtitle: 'How to build your own skill system',
+    content: `
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-number">1</div>
+          <div class="flow-content">
+            <div class="flow-label">Define Skill Schema</div>
+            <div class="flow-desc">Decide frontmatter fields: name, description, tags, version, dependencies</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">2</div>
+          <div class="flow-content">
+            <div class="flow-label">Build Skill Indexer</div>
+            <div class="flow-desc">Scan skills/ folder on startup, parse frontmatter, build in-memory index</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">3</div>
+          <div class="flow-content">
+            <div class="flow-label">Implement Selection API</div>
+            <div class="flow-desc">Accept user prompt, send to selection model with skill index, return selected skills</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">4</div>
+          <div class="flow-content">
+            <div class="flow-label">Build Content Loader</div>
+            <div class="flow-desc">Read full content of selected skills from disk, strip frontmatter</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">5</div>
+          <div class="flow-content">
+            <div class="flow-label">Create Prompt Augmenter</div>
+            <div class="flow-desc">Combine original prompt + skill documentation into augmented prompt</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">6</div>
+          <div class="flow-content">
+            <div class="flow-label">Implement Generation API</div>
+            <div class="flow-desc">Send augmented prompt to generation model, return response</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <div class="flow-step">
+          <div class="flow-number">7</div>
+          <div class="flow-content">
+            <div class="flow-label">Add Visualization</div>
+            <div class="flow-desc">Build UI to show selected skills, confidence scores, augmented prompt (like your React visualizer!)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-title">📦 Reference Implementation</div>
+        <div class="highlight-content">
+          Your <strong>agent-skill-visualizer</strong> project is a complete working example! Check out:<br>
+          • <code>backend/server.js</code> — Skill indexing + selection + augmentation<br>
+          • <code>src/App.tsx</code> — React visualization with real-time SSE updates<br>
+          • <code>backend/skills/</code> — Example skill structure
+        </div>
+      </div>
+    `
+  },
+
+  // Slide 21: Key Takeaways
   {
     title: 'Key Takeaways',
     subtitle: 'Everything you need to remember',
@@ -3449,7 +3391,6 @@ a complete form implementation guide.
     `
   },
 ];
-
 // State
 let currentSlide = 0;
 

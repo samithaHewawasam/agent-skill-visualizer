@@ -21,13 +21,41 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
 
   if (!flowData && !isLoading) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
-        <div className="text-center text-gray-500 p-8">
-          <div className="bg-gradient-to-br from-blue-500 to-purple-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-            <Sparkles className="w-8 h-8 text-white" />
+      <div
+        className="w-full h-full flex items-center justify-center"
+        style={{
+          background: 'linear-gradient(135deg, #f5f5f5 0%, #ececec 100%)'
+        }}
+      >
+        <div className="text-center p-8" style={{ animation: 'fadeIn 0.4s ease' }}>
+          <div
+            className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4"
+            style={{
+              background: 'var(--primary)',
+              boxShadow: '0 8px 24px rgba(248, 150, 128, 0.4)',
+              animation: 'glow 3s ease-in-out infinite'
+            }}
+          >
+            <Sparkles className="w-10 h-10" style={{ color: 'white' }} />
           </div>
-          <p className="text-xl font-bold text-gray-700 mb-2">Enter a prompt to visualize the flow</p>
-          <p className="text-sm text-gray-500">See how the LLM selects skills and augments your prompt</p>
+          <p
+            className="mb-2"
+            style={{
+              fontSize: 'var(--fs-h2)',
+              fontWeight: 'var(--fw-bold)',
+              color: '#333'
+            }}
+          >
+            Enter a prompt to visualize the flow
+          </p>
+          <p
+            style={{
+              fontSize: 'var(--fs-body)',
+              color: '#666'
+            }}
+          >
+            See how the LLM selects skills and augments your prompt
+          </p>
         </div>
       </div>
     );
@@ -35,17 +63,57 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+      <div
+        className="w-full h-full flex items-center justify-center"
+        style={{
+          background: 'linear-gradient(135deg, #f5f5f5 0%, #ececec 100%)'
+        }}
+      >
         <div className="text-center p-8">
-          <div className="relative w-16 h-16 mx-auto mb-6">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200"></div>
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-blue-600 border-r-purple-600 absolute top-0 left-0"></div>
+          <div className="relative w-20 h-20 mx-auto mb-6">
+            <div
+              className="rounded-full h-20 w-20 border-4 absolute top-0 left-0"
+              style={{
+                borderColor: '#e0e0e0',
+                animation: 'spin 1s linear infinite'
+              }}
+            ></div>
+            <div
+              className="rounded-full h-20 w-20 border-4 absolute top-0 left-0"
+              style={{
+                borderTopColor: 'var(--primary)',
+                borderRightColor: 'var(--secondary)',
+                borderBottomColor: 'transparent',
+                borderLeftColor: 'transparent',
+                animation: 'spin 1s linear infinite'
+              }}
+            ></div>
           </div>
-          <p className="text-lg font-semibold text-gray-700 mb-1">Processing your prompt...</p>
+          <p
+            className="mb-1"
+            style={{
+              fontSize: 'var(--fs-h3)',
+              fontWeight: 'var(--fw-medium)',
+              color: '#333'
+            }}
+          >
+            Processing your prompt...
+          </p>
           {progressMessage ? (
-            <p className="text-sm text-blue-600 font-medium animate-pulse">{progressMessage}</p>
+            <p
+              style={{
+                fontSize: 'var(--fs-small)',
+                color: 'var(--primary)',
+                fontWeight: 'var(--fw-medium)',
+                animation: 'pulse 2s infinite'
+              }}
+            >
+              {progressMessage}
+            </p>
           ) : (
-            <p className="text-sm text-gray-500">Analyzing skills and generating flow</p>
+            <p style={{ fontSize: 'var(--fs-small)', color: '#666' }}>
+              Analyzing skills and generating flow
+            </p>
           )}
         </div>
       </div>
@@ -59,15 +127,42 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
   };
 
   return (
-    <div className="w-full h-full bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 overflow-auto p-8">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div
+      className="h-full overflow-y-auto p-4 md:p-6 lg:p-8"
+      style={{ background: 'linear-gradient(135deg, #f5f5f5 0%, #ececec 100%)' }}
+    >
+      <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
         {/* 1. User Prompt Node */}
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl p-5 shadow-xl border-2 border-blue-400/50">
-          <div className="text-xs font-bold uppercase tracking-wider opacity-90 mb-2 flex items-center gap-2">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+        <div
+          className="text-white rounded-xl p-4 md:p-5 shadow-xl border-2"
+          style={{
+            background: 'linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)',
+            borderColor: 'var(--primary)',
+            animation: 'slideIn 0.5s ease'
+          }}
+        >
+          <div
+            className="uppercase mb-2 flex items-center gap-2"
+            style={{
+              fontSize: 'var(--fs-tiny)',
+              fontWeight: 'var(--fw-bold)',
+              letterSpacing: 'var(--ls-wider)',
+              opacity: 0.9
+            }}
+          >
+            <div
+              className="w-2 h-2 bg-white rounded-full"
+              style={{ animation: 'pulse 2s infinite' }}
+            ></div>
             User Input
           </div>
-          <div className="font-medium text-base leading-relaxed">
+          <div
+            style={{
+              fontWeight: 'var(--fw-regular)',
+              fontSize: 'var(--fs-body)',
+              lineHeight: 'var(--lh-loose)'
+            }}
+          >
             {flowData.userPrompt.length > 120
               ? flowData.userPrompt.substring(0, 120) + '...'
               : flowData.userPrompt}
@@ -83,15 +178,49 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
           // Simplified 3-step flow when skills disabled
           <>
             {/* Direct LLM Generation - No Skills */}
-            <div className="bg-gradient-to-br from-gray-500 to-gray-600 text-white rounded-2xl p-5 shadow-xl border-2 border-gray-400/50">
-              <div className="text-xs font-bold uppercase tracking-wider opacity-90 mb-2 flex items-center gap-2">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            <div
+              className="text-white rounded-2xl p-4 md:p-5 shadow-xl border-2"
+              style={{
+                background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+                borderColor: 'rgba(156, 163, 175, 0.5)',
+                animation: 'slideIn 0.5s ease'
+              }}
+            >
+              <div
+                className="mb-2 flex items-center gap-2"
+                style={{
+                  fontSize: 'var(--fs-tiny)',
+                  fontWeight: 'var(--fw-bold)',
+                  textTransform: 'uppercase',
+                  letterSpacing: 'var(--ls-wider)',
+                  opacity: 0.9
+                }}
+              >
+                <div
+                  className="w-2 h-2 bg-white rounded-full"
+                  style={{ animation: 'pulse 2s infinite' }}
+                ></div>
                 Direct Response (Skills Disabled)
               </div>
-              <div className="font-semibold text-base">
+              <div
+                style={{
+                  fontWeight: 'var(--fw-medium)',
+                  fontSize: 'var(--fs-body)',
+                  lineHeight: 'var(--lh-normal)'
+                }}
+              >
                 Generating response without skill augmentation
               </div>
-              <div className="text-xs text-gray-100 font-mono bg-gray-700/40 px-3 py-1.5 rounded-lg border border-gray-400/30 mt-3 inline-block">
+              <div
+                className="mt-3 inline-block px-3 py-1.5 rounded-lg border"
+                style={{
+                  fontSize: 'var(--fs-tiny)',
+                  color: 'rgba(229, 231, 235, 1)',
+                  fontFamily: 'var(--font)',
+                  background: 'rgba(55, 65, 81, 0.4)',
+                  borderColor: 'rgba(156, 163, 175, 0.3)'
+                }}
+              >
                 ✨ {flowData.models.generation.label}
               </div>
             </div>
@@ -102,17 +231,52 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
             </div>
 
             {/* Final Response */}
-            <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-5 shadow-xl border-2 border-green-400/50">
-              <div className="text-xs font-bold uppercase tracking-wider opacity-90 mb-2 flex items-center gap-2">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            <div
+              className="text-white rounded-2xl p-4 md:p-5 shadow-xl border-2"
+              style={{
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                borderColor: 'rgba(52, 211, 153, 0.5)',
+                animation: 'slideIn 0.5s ease'
+              }}
+            >
+              <div
+                className="mb-2 flex items-center gap-2"
+                style={{
+                  fontSize: 'var(--fs-tiny)',
+                  fontWeight: 'var(--fw-bold)',
+                  textTransform: 'uppercase',
+                  letterSpacing: 'var(--ls-wider)',
+                  opacity: 0.9
+                }}
+              >
+                <div
+                  className="w-2 h-2 bg-white rounded-full"
+                  style={{ animation: 'pulse 2s infinite' }}
+                ></div>
                 Final Response
               </div>
-              <div className="font-medium text-base line-clamp-3 leading-relaxed bg-green-700/20 rounded-lg p-3 border border-green-400/30">
+              <div
+                className="line-clamp-3 rounded-lg p-3 border"
+                style={{
+                  fontWeight: 'var(--fw-regular)',
+                  fontSize: 'var(--fs-body)',
+                  lineHeight: 'var(--lh-loose)',
+                  background: 'rgba(6, 78, 59, 0.2)',
+                  borderColor: 'rgba(52, 211, 153, 0.3)'
+                }}
+              >
                 {flowData.llmResponse.length > 200
                   ? flowData.llmResponse.substring(0, 200) + '...'
                   : flowData.llmResponse}
               </div>
-              <div className="text-xs opacity-80 mt-3 font-mono">
+              <div
+                className="mt-3"
+                style={{
+                  fontSize: 'var(--fs-tiny)',
+                  opacity: 0.8,
+                  fontFamily: 'var(--font)'
+                }}
+              >
                 📊 {flowData.llmResponse.length} characters
               </div>
             </div>
@@ -121,22 +285,56 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
           // Full 5-step flow when skills enabled
           <>
             {/* 2. Skill Selection Step */}
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl p-5 shadow-xl border-2 border-purple-400/50">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wider opacity-90 mb-2 flex items-center gap-2">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                Step 1: Skill Selection
-              </div>
-              <div className="font-semibold text-base">
-                {flowData.selectedSkills.length} of {flowData.allSkills.length} skills selected
+            <div
+              className="text-white rounded-2xl p-4 md:p-5 shadow-xl border-2"
+              style={{
+                background: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)',
+                borderColor: 'rgba(168, 85, 247, 0.5)',
+                animation: 'slideIn 0.5s ease'
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <div
+                    className="mb-2 flex items-center gap-2"
+                    style={{
+                      fontSize: 'var(--fs-tiny)',
+                      fontWeight: 'var(--fw-bold)',
+                      textTransform: 'uppercase',
+                      letterSpacing: 'var(--ls-wider)',
+                      opacity: 0.9
+                    }}
+                  >
+                    <div
+                      className="w-2 h-2 bg-white rounded-full"
+                      style={{ animation: 'pulse 2s infinite' }}
+                    ></div>
+                    Step 1: Skill Selection
+                  </div>
+                  <div
+                    style={{
+                      fontWeight: 'var(--fw-medium)',
+                      fontSize: 'var(--fs-body)',
+                      lineHeight: 'var(--lh-normal)'
+                    }}
+                  >
+                    {flowData.selectedSkills.length} of {flowData.allSkills.length} skills selected
+                  </div>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-lg border"
+                  style={{
+                    fontSize: 'var(--fs-tiny)',
+                    color: 'rgba(243, 232, 255, 1)',
+                    fontFamily: 'var(--font)',
+                    background: 'rgba(126, 34, 206, 0.4)',
+                    borderColor: 'rgba(168, 85, 247, 0.3)'
+                  }}
+                >
+                  ⚡ {flowData.models.selection.label}
+                </div>
               </div>
             </div>
-            <div className="text-xs text-purple-100 font-mono bg-purple-700/40 px-3 py-1.5 rounded-lg border border-purple-400/30">
-              ⚡ {flowData.models.selection.label}
-            </div>
-          </div>
-        </div>
 
         {/* Arrow */}
         <div className="flex justify-center">
@@ -144,12 +342,27 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
         </div>
 
         {/* 3. All Skills Grid */}
-        <div className="bg-white rounded-2xl p-6 shadow-2xl border-2 border-gray-200">
-          <div className="text-sm font-bold text-gray-700 mb-5 uppercase tracking-wide flex items-center gap-2">
+        <div
+          className="bg-white rounded-2xl p-4 md:p-6 shadow-2xl border-2"
+          style={{
+            borderColor: '#e5e7eb',
+            animation: 'fadeIn 0.5s ease'
+          }}
+        >
+          <div
+            className="mb-5 flex items-center gap-2"
+            style={{
+              fontSize: 'var(--fs-small)',
+              fontWeight: 'var(--fw-bold)',
+              color: '#374151',
+              textTransform: 'uppercase',
+              letterSpacing: 'var(--ls-wide)'
+            }}
+          >
             <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
             Available Skills
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {flowData.allSkills.map((skill) => {
               const selectedDetails = getSkillDetails(skill);
               const isSelected = skill.selected;
@@ -176,14 +389,35 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
                     title={selectedDetails.reason}
                   >
                     {/* Confidence badge */}
-                    <span className="absolute -top-2.5 -right-2.5 text-xs bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-full px-2 py-1 font-bold shadow-lg border-2 border-white">
+                    <span
+                      className="absolute -top-2.5 -right-2.5 text-white rounded-full px-2 py-1 shadow-lg border-2 border-white"
+                      style={{
+                        fontSize: 'var(--fs-tiny)',
+                        fontWeight: 'var(--fw-bold)',
+                        background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
+                      }}
+                    >
                       {Math.round(selectedDetails.confidence * 100)}%
                     </span>
 
-                    <div className="text-sm font-bold text-indigo-900 mb-1.5">
+                    <div
+                      className="mb-1.5"
+                      style={{
+                        fontSize: 'var(--fs-small)',
+                        fontWeight: 'var(--fw-bold)',
+                        color: '#312e81'
+                      }}
+                    >
                       {skill.name}
                     </div>
-                    <div className="text-xs text-indigo-700 line-clamp-2 leading-relaxed">
+                    <div
+                      className="line-clamp-2"
+                      style={{
+                        fontSize: 'var(--fs-tiny)',
+                        color: '#4338ca',
+                        lineHeight: 'var(--lh-loose)'
+                      }}
+                    >
                       {skill.description}
                     </div>
                   </div>
@@ -193,13 +427,28 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
                 return (
                   <div
                     key={skill.id}
-                    className="p-4 rounded-xl border-2 border-gray-200 bg-gray-50 text-gray-400 opacity-40 transition-all duration-500 hover:opacity-60"
+                    className="p-4 rounded-xl border-2 bg-gray-50 text-gray-400 opacity-40 transition-all duration-500 hover:opacity-60"
+                    style={{
+                      borderColor: '#e5e7eb'
+                    }}
                     title={skill.description}
                   >
-                    <div className="text-sm font-semibold mb-1.5">
+                    <div
+                      className="mb-1.5"
+                      style={{
+                        fontSize: 'var(--fs-small)',
+                        fontWeight: 'var(--fw-medium)'
+                      }}
+                    >
                       {skill.name}
                     </div>
-                    <div className="text-xs line-clamp-2 leading-relaxed">
+                    <div
+                      className="line-clamp-2"
+                      style={{
+                        fontSize: 'var(--fs-tiny)',
+                        lineHeight: 'var(--lh-loose)'
+                      }}
+                    >
                       {skill.description}
                     </div>
                   </div>
@@ -215,12 +464,37 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
         </div>
 
         {/* 4. Prompt Augmentation Step */}
-        <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl p-5 shadow-xl border-2 border-orange-400/50">
-          <div className="text-xs font-bold uppercase tracking-wider opacity-90 mb-2 flex items-center gap-2">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+        <div
+          className="text-white rounded-2xl p-4 md:p-5 shadow-xl border-2"
+          style={{
+            background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+            borderColor: 'rgba(251, 146, 60, 0.5)',
+            animation: 'slideIn 0.5s ease'
+          }}
+        >
+          <div
+            className="mb-2 flex items-center gap-2"
+            style={{
+              fontSize: 'var(--fs-tiny)',
+              fontWeight: 'var(--fw-bold)',
+              textTransform: 'uppercase',
+              letterSpacing: 'var(--ls-wider)',
+              opacity: 0.9
+            }}
+          >
+            <div
+              className="w-2 h-2 bg-white rounded-full"
+              style={{ animation: 'pulse 2s infinite' }}
+            ></div>
             Step 2: Prompt Augmentation
           </div>
-          <div className="font-semibold text-base">
+          <div
+            style={{
+              fontWeight: 'var(--fw-medium)',
+              fontSize: 'var(--fs-body)',
+              lineHeight: 'var(--lh-normal)'
+            }}
+          >
             Enhanced with {flowData.skillContents.length} skill documentation{flowData.skillContents.length !== 1 ? 's' : ''}
           </div>
         </div>
@@ -231,18 +505,52 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
         </div>
 
         {/* 5. Response Generation Step */}
-        <div className="bg-gradient-to-br from-teal-500 to-teal-600 text-white rounded-2xl p-5 shadow-xl border-2 border-teal-400/50">
+        <div
+          className="text-white rounded-2xl p-4 md:p-5 shadow-xl border-2"
+          style={{
+            background: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)',
+            borderColor: 'rgba(45, 212, 191, 0.5)',
+            animation: 'slideIn 0.5s ease'
+          }}
+        >
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-xs font-bold uppercase tracking-wider opacity-90 mb-2 flex items-center gap-2">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+              <div
+                className="mb-2 flex items-center gap-2"
+                style={{
+                  fontSize: 'var(--fs-tiny)',
+                  fontWeight: 'var(--fw-bold)',
+                  textTransform: 'uppercase',
+                  letterSpacing: 'var(--ls-wider)',
+                  opacity: 0.9
+                }}
+              >
+                <div
+                  className="w-2 h-2 bg-white rounded-full"
+                  style={{ animation: 'pulse 2s infinite' }}
+                ></div>
                 Step 3: Response Generation
               </div>
-              <div className="font-semibold text-base">
+              <div
+                style={{
+                  fontWeight: 'var(--fw-medium)',
+                  fontSize: 'var(--fs-body)',
+                  lineHeight: 'var(--lh-normal)'
+                }}
+              >
                 Generating response with augmented context
               </div>
             </div>
-            <div className="text-xs text-teal-100 font-mono bg-teal-700/40 px-3 py-1.5 rounded-lg border border-teal-400/30">
+            <div
+              className="px-3 py-1.5 rounded-lg border"
+              style={{
+                fontSize: 'var(--fs-tiny)',
+                color: 'rgba(204, 251, 241, 1)',
+                fontFamily: 'var(--font)',
+                background: 'rgba(19, 78, 74, 0.4)',
+                borderColor: 'rgba(45, 212, 191, 0.3)'
+              }}
+            >
               ✨ {flowData.models.generation.label}
             </div>
           </div>
@@ -254,17 +562,52 @@ export const FlowDiagram = ({ flowData, isLoading, progressMessage }: FlowDiagra
         </div>
 
             {/* 6. LLM Response Node */}
-            <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-5 shadow-xl border-2 border-green-400/50">
-              <div className="text-xs font-bold uppercase tracking-wider opacity-90 mb-2 flex items-center gap-2">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            <div
+              className="text-white rounded-2xl p-4 md:p-5 shadow-xl border-2"
+              style={{
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                borderColor: 'rgba(52, 211, 153, 0.5)',
+                animation: 'slideIn 0.5s ease'
+              }}
+            >
+              <div
+                className="mb-2 flex items-center gap-2"
+                style={{
+                  fontSize: 'var(--fs-tiny)',
+                  fontWeight: 'var(--fw-bold)',
+                  textTransform: 'uppercase',
+                  letterSpacing: 'var(--ls-wider)',
+                  opacity: 0.9
+                }}
+              >
+                <div
+                  className="w-2 h-2 bg-white rounded-full"
+                  style={{ animation: 'pulse 2s infinite' }}
+                ></div>
                 Final Response
               </div>
-              <div className="font-medium text-base line-clamp-3 leading-relaxed bg-green-700/20 rounded-lg p-3 border border-green-400/30">
+              <div
+                className="line-clamp-3 rounded-lg p-3 border"
+                style={{
+                  fontWeight: 'var(--fw-regular)',
+                  fontSize: 'var(--fs-body)',
+                  lineHeight: 'var(--lh-loose)',
+                  background: 'rgba(6, 78, 59, 0.2)',
+                  borderColor: 'rgba(52, 211, 153, 0.3)'
+                }}
+              >
                 {flowData.llmResponse.length > 200
                   ? flowData.llmResponse.substring(0, 200) + '...'
                   : flowData.llmResponse}
               </div>
-              <div className="text-xs opacity-80 mt-3 font-mono">
+              <div
+                className="mt-3"
+                style={{
+                  fontSize: 'var(--fs-tiny)',
+                  opacity: 0.8,
+                  fontFamily: 'var(--font)'
+                }}
+              >
                 📊 {flowData.llmResponse.length} characters
               </div>
             </div>

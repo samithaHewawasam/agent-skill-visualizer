@@ -22,11 +22,6 @@ export const processPromptStream = (
   onError?: (error: Error) => void,
   onComplete?: () => void
 ): EventSource => {
-  const eventSource = new EventSource(
-    `${API_BASE_URL}/api/process-prompt-stream`,
-    { withCredentials: false }
-  );
-
   // We need to send the prompt via POST, but EventSource only supports GET
   // So we'll use fetch with streaming instead
   const controller = new AbortController();
@@ -67,7 +62,7 @@ export const processPromptStream = (
 
         for (const line of lines) {
           if (line.startsWith('event: ')) {
-            const eventType = line.substring(7).trim();
+            // Event type line - we can ignore it for now
             continue;
           }
 

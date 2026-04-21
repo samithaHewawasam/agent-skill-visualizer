@@ -25,49 +25,84 @@ export const ResponseModal = ({ isOpen, onClose, response, prompt }: ResponseMod
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 backdrop-blur-sm"
+      style={{ background: 'rgba(26, 26, 26, 0.8)' }}
       onClick={onClose}
     >
       <div
-        className="bg-gray-900 rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col transform transition-all duration-300 ease-out scale-100 opacity-100 border border-gray-700"
+        className="rounded-xl md:rounded-2xl shadow-2xl w-full max-w-5xl max-h-[95vh] md:max-h-[90vh] flex flex-col transform transition-all duration-300 ease-out scale-100 opacity-100 border"
+        style={{
+          background: 'var(--bg)',
+          borderColor: 'var(--border)'
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-700 bg-gradient-to-r from-gray-800 to-gray-850">
-          <div className="flex-1 min-w-0 mr-4">
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-              <span className="text-2xl">🤖</span>
+        <div
+          className="flex items-center justify-between p-4 md:p-6 border-b"
+          style={{
+            borderColor: 'var(--border)',
+            background: 'linear-gradient(90deg, var(--surface) 0%, var(--dim) 100%)'
+          }}
+        >
+          <div className="flex-1 min-w-0 mr-2 md:mr-4">
+            <h2
+              className="flex items-center gap-2 text-lg md:text-xl lg:text-2xl"
+              style={{
+                fontWeight: 'var(--fw-bold)',
+                color: 'var(--text)'
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>🤖</span>
               Generated Response
             </h2>
-            <p className="text-sm text-gray-400 mt-1 truncate">
+            <p
+              className="mt-1 truncate"
+              style={{
+                fontSize: 'var(--fs-small)',
+                color: 'var(--muted)'
+              }}
+            >
               For prompt: "{prompt.substring(0, 60)}{prompt.length > 60 ? '...' : ''}"
             </p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopy}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 rounded-lg transition-colors"
+              style={{
+                background: 'transparent',
+                color: copied ? 'var(--ok)' : 'var(--muted)'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--dim)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
               aria-label="Copy response"
               title={copied ? 'Copied!' : 'Copy to clipboard'}
             >
               {copied ? (
-                <Check className="w-5 h-5 text-green-400" />
+                <Check className="w-5 h-5" />
               ) : (
-                <Copy className="w-5 h-5 text-gray-300" />
+                <Copy className="w-5 h-5" />
               )}
             </button>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2 rounded-lg transition-colors"
+              style={{ background: 'transparent', color: 'var(--muted)' }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--dim)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
               aria-label="Close modal"
             >
-              <X className="w-6 h-6 text-gray-300" />
+              <X className="w-6 h-6" />
             </button>
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-8 bg-gray-900">
+        <div
+          className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8"
+          style={{ background: 'var(--bg)' }}
+        >
           <div className="markdown-content">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -216,13 +251,43 @@ export const ResponseModal = ({ isOpen, onClose, response, prompt }: ResponseMod
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-700 bg-gray-900">
-          <div className="text-sm text-gray-400">
+        <div
+          className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 md:p-6 border-t"
+          style={{
+            borderColor: 'var(--border)',
+            background: 'var(--surface)'
+          }}
+        >
+          <div
+            className="text-center sm:text-left text-xs md:text-sm"
+            style={{
+              color: 'var(--muted)'
+            }}
+          >
             {response.length.toLocaleString()} characters • {response.split(/\s+/).filter(Boolean).length.toLocaleString()} words
           </div>
           <button
             onClick={onClose}
-            className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+            className="px-4 md:px-6 py-2 md:py-2.5 rounded-lg font-semibold transition-all text-sm md:text-base w-full sm:w-auto"
+            style={{
+              background: 'var(--primary)',
+              color: 'var(--bg)',
+              border: `1px solid var(--primary)`,
+              fontSize: 'var(--fs-small)',
+              fontWeight: 'var(--fw-medium)',
+              boxShadow: '0 4px 12px rgba(248, 150, 128, 0.3)',
+              transition: 'all var(--duration-normal) var(--ease-out)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'var(--secondary)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(248, 150, 128, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'var(--primary)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(248, 150, 128, 0.3)';
+            }}
           >
             Close
           </button>
