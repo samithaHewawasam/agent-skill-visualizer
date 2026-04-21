@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Agent directories
+.claude
+.anthropic
+.agent
+.aider
+.cursor
